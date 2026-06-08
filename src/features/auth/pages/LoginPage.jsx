@@ -1,163 +1,148 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Pill, Sparkles } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { loginSchema } from '../utils/schemas';
-import useAuthStore from '../store/authStore';
-import Input from '../../../shared/components/Input';
-import pharmaBg from '../../../assets/pharmacy-bg.jpg';
+import React, { useState } from 'react';
+import { User, Lock, Eye, EyeOff } from 'lucide-react';
 
-const B  = 'oklch(55% 0.18 207.078)';
-const BL = 'oklch(96% 0.04 207.078)';
-const BM = 'oklch(86.5% 0.127 207.078)';
-
-export default function LoginPage() {
-  const navigate  = useNavigate();
-  const login     = useAuthStore((s) => s.login);
-  const [showPwd, setShowPwd] = useState(false);
-
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
-    resolver: zodResolver(loginSchema),
+const SignInPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    rememberMe: false
   });
 
-  const onSubmit = async (data) => {
-    try {
-      const user = await login(data);
-      toast.success(`Welcome, ${user.firstName}!`);
-      navigate('/dashboard');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Invalid credentials.');
-    }
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
   };
 
   return (
-    <div className="min-h-screen flex">
-
-      {/* ── Left: photo + colour overlay ── */}
-      <div
-        className="hidden lg:flex flex-col justify-between w-[52%] relative overflow-hidden"
-        style={{ backgroundImage: `url(${pharmaBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-      >
-        {/* deep teal overlay */}
-        <div className="absolute inset-0" style={{ background: 'oklch(38% 0.16 207.078 / 0.90)' }} />
-        {/* subtle grid */}
-        <div className="absolute inset-0 opacity-[0.07]"
-          style={{ backgroundImage: 'linear-gradient(white 1px,transparent 1px),linear-gradient(90deg,white 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
-
-        {/* Logo */}
-        <div className="relative z-10 flex items-center gap-3 p-10">
-          <div className="w-9 h-9 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center backdrop-blur-sm">
-            <Pill size={18} className="text-white" />
-          </div>
-          <span className="font-bold text-white tracking-tight">PharmaManager</span>
-        </div>
-
-        {/* Hero copy */}
-        <div className="relative z-10 px-10 space-y-6">
-          {/* pill badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
-            <Sparkles size={12} className="text-white/70" />
-            <span className="text-white/80 text-xs font-medium tracking-wide">200 + pharmacies trust us</span>
-          </div>
-
-          <h1 className="text-[3.25rem] font-extrabold text-white leading-[1.08] tracking-tight">
-            Your pharmacy,<br />
-            <span style={{ color: BM }}>fully in control.</span>
-          </h1>
-
-          <p className="text-white/55 text-base leading-relaxed max-w-sm">
-            Inventory · Sales · Reports · Staff — one clean dashboard.
-          </p>
-        </div>
-
-        {/* Stats row */}
-        <div className="relative z-10 p-10">
-          <div className="grid grid-cols-3 gap-3">
-            {[['500+','Medicines'],['99.9%','Uptime'],['24/7','Support']].map(([v,l]) => (
-              <div key={l} className="rounded-2xl p-4 text-center backdrop-blur-sm"
-                style={{ background: 'oklch(100% 0 0 / 0.08)', border: '1px solid oklch(100% 0 0 / 0.12)' }}>
-                <p className="text-2xl font-extrabold text-white">{v}</p>
-                <p className="text-xs mt-0.5" style={{ color: BM }}>{l}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Right: form ── */}
-      <div className="flex-1 flex items-center justify-center relative overflow-hidden"
-        style={{ background: 'oklch(97.5% 0.025 207.078)' }}>
-
-        {/* soft background blobs */}
-        <div className="absolute top-[-80px] right-[-80px] w-72 h-72 rounded-full opacity-30 blur-3xl pointer-events-none"
-          style={{ background: BM }} />
-        <div className="absolute bottom-[-60px] left-[-60px] w-56 h-56 rounded-full opacity-20 blur-3xl pointer-events-none"
-          style={{ background: B }} />
-
-        <div className="relative z-10 w-full max-w-sm px-6 space-y-8">
-
-          {/* Mobile logo */}
-          <div className="flex lg:hidden items-center gap-2 justify-center">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: B }}>
-              <Pill size={15} className="text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 flex items-center justify-center p-4">
+      {/* Main Container */}
+      <div className="w-full max-w-4xl bg-blue-800 rounded-3xl shadow-2xl overflow-hidden">
+        <div className="flex flex-col md:flex-row">
+          
+          {/* Left Side - Welcome Section */}
+          <div className="md:w-1/2 bg-blue-700 p-12 relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+            {/* Decorative Circles */}
+            <div className="absolute top-10 left-10 w-32 h-32 bg-blue-600 rounded-full opacity-50 blur-xl"></div>
+            <div className="absolute bottom-20 right-10 w-48 h-48 bg-blue-500 rounded-full opacity-40 blur-2xl"></div>
+            <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-blue-400 rounded-full opacity-30 blur-lg"></div>
+            
+            {/* Content */}
+            <div className="relative z-10 text-white">
+              <h1 className="text-4xl font-bold mb-4 tracking-wide">WELCOME</h1>
+              <p className="text-blue-200 text-lg mb-6 font-medium">YOUR HEADLINE NAME</p>
+              <p className="text-blue-300 text-sm leading-relaxed max-w-xs">
+                Sign in to access your account and explore amazing features designed just for you.
+              </p>
             </div>
-            <span className="font-bold text-slate-800">PharmaManager</span>
+
+            {/* Large decorative circle */}
+            <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-600 rounded-full opacity-60 transform translate-x-1/3 translate-y-1/3"></div>
           </div>
 
-          {/* Heading */}
-          <div className="space-y-1">
-            <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">Sign in</h2>
-            <p className="text-slate-400 text-sm">Access your pharmacy dashboard.</p>
-          </div>
+          {/* Right Side - Sign In Form */}
+          <div className="md:w-1/2 bg-white p-12 min-h-[400px] flex flex-col justify-center">
+            <div className="max-w-sm mx-auto w-full">
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Sign in</h2>
+              <p className="text-gray-500 text-sm mb-8">
+                Enter your credentials to access your account
+              </p>
 
-          {/* Card */}
-          <div className="bg-white rounded-3xl p-8 space-y-5"
-            style={{ boxShadow: `0 20px 60px oklch(55% 0.18 207.078 / 0.13), 0 2px 8px oklch(55% 0.18 207.078 / 0.06)`, border: `1.5px solid ${BM}40` }}>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Username Input */}
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <User size={20} />
+                  </div>
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    placeholder="User Name"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    required
+                  />
+                </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <Input label="Email" type="email" placeholder="you@pharmacy.com"
-                icon={Mail} error={errors.email?.message} {...register('email')} />
-
-              <Input label="Password" type={showPwd ? 'text' : 'password'} placeholder="••••••••"
-                icon={Lock} error={errors.password?.message}
-                rightElement={
-                  <button type="button" onClick={() => setShowPwd(v => !v)}
-                    className="text-slate-300 hover:text-slate-500 transition-colors">
-                    {showPwd ? <EyeOff size={15} /> : <Eye size={15} />}
+                {/* Password Input */}
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <Lock size={20} />
+                  </div>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Password"
+                    className="w-full pl-12 pr-24 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors text-sm font-medium"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
-                }
-                {...register('password')} />
+                </div>
 
-              <button type="submit" disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-white font-bold text-sm tracking-wide transition-all active:scale-[0.98] disabled:opacity-60"
-                style={{ background: `linear-gradient(135deg, ${BM}, ${B})`, boxShadow: `0 8px 24px oklch(55% 0.18 207.078 / 0.35)` }}>
-                {isSubmitting
-                  ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                  : <> Sign In <ArrowRight size={15} strokeWidth={2.5} /> </>}
-              </button>
-            </form>
+                {/* Remember Me & Forgot Password */}
+                <div className="flex items-center justify-between text-sm">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="rememberMe"
+                      checked={formData.rememberMe}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-gray-600">Remember me</span>
+                  </label>
+                  <a href="#" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                    Forgot Password?
+                  </a>
+                </div>
 
-            {/* divider */}
-            <div className="flex items-center gap-3 pt-1">
-              <div className="flex-1 h-px bg-slate-100" />
-              <span className="text-xs text-slate-300 font-medium">secure access</span>
-              <div className="flex-1 h-px bg-slate-100" />
-            </div>
+                {/* Sign In Button */}
+                <button
+                  type="submit"
+                  className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                >
+                  Sign in
+                </button>
 
-            {/* Role chips */}
-            <div className="flex gap-2 justify-center">
-              {['Owner', 'Pharmacist'].map(r => (
-                <span key={r} className="text-xs px-3 py-1 rounded-full font-semibold"
-                  style={{ background: BL, color: B, border: `1px solid ${BM}60` }}>
-                  {r}
-                </span>
-              ))}
+                {/* Alternative Sign In */}
+                <button
+                  type="button"
+                  className="w-full bg-white border-2 border-gray-300 hover:border-blue-500 text-gray-700 hover:text-blue-600 font-semibold py-3 rounded-lg transition-all duration-200"
+                >
+                  Sign in with other
+                </button>
+
+                {/* Sign Up Link */}
+                <p className="text-center text-sm text-gray-600 mt-6">
+                  Don't have an account?{' '}
+                  <a href="#" className="text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                    Sign up
+                  </a>
+                </p>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default SignInPage;

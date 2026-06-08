@@ -12,18 +12,21 @@ import Badge from '../../../shared/components/Badge';
 const B  = 'oklch(55% 0.18 207.078)';
 const BL = 'oklch(96% 0.04 207.078)';
 const BM = 'oklch(86.5% 0.127 207.078)';
+
 const card = {
-  border: `1.5px solid oklch(86.5% 0.127 207.078 / 0.35)`,
-  boxShadow: '0 4px 24px oklch(55% 0.18 207.078 / 0.07)',
+  border: '1.5px solid oklch(91% 0.04 207.078)',
+  boxShadow: '0 2px 16px oklch(55% 0.18 207.078 / 0.06)',
+  borderRadius: '20px',
 };
 
-const SectionHead = ({ icon: Icon, label }) => (
-  <div className="flex items-center gap-2.5 mb-6">
-    <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-      style={{ background: BL, border: `1px solid ${BM}50` }}>
-      <Icon size={14} style={{ color: B }} />
+const SectionHead = ({ icon: Icon, title }) => (
+  <div className="flex items-center gap-3 mb-6 pb-4"
+    style={{ borderBottom: '1px solid oklch(93% 0.03 207.078)' }}>
+    <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+      style={{ background: `linear-gradient(135deg,${BM},${B})`, boxShadow: `0 4px 12px oklch(55% 0.18 207.078 / 0.3)` }}>
+      <Icon size={15} className="text-white" />
     </div>
-    <span className="font-bold text-slate-700 text-sm tracking-wide">{label}</span>
+    <span className="font-extrabold text-slate-700">{title}</span>
   </div>
 );
 
@@ -53,42 +56,44 @@ export default function ProfilePage() {
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : 'U';
 
   return (
-    <div className="min-h-screen p-6 pb-12" style={{ background: 'oklch(97.5% 0.025 207.078)' }}>
+    <div className="min-h-screen p-6 pb-16" style={{ background: 'oklch(97% 0.02 207.078)' }}>
       <div className="max-w-2xl mx-auto space-y-5">
 
-        <h1 className="text-xl font-extrabold text-slate-800 tracking-tight">My Profile</h1>
+        <h1 className="text-2xl font-black text-slate-800 tracking-tight">My Profile</h1>
 
-        {/* ── Hero card ── */}
-        <div className="bg-white rounded-3xl overflow-hidden" style={card}>
-          {/* Banner with mesh pattern */}
-          <div className="h-24 relative" style={{ background: `linear-gradient(135deg, ${BM} 0%, ${B} 60%, oklch(45% 0.18 207.078) 100%)` }}>
+        {/* ── Hero ── */}
+        <div className="bg-white overflow-hidden" style={card}>
+          {/* banner */}
+          <div className="h-28 relative" style={{ background: `linear-gradient(135deg,${BM} 0%,${B} 55%,oklch(42% 0.17 207.078) 100%)` }}>
             <div className="absolute inset-0"
-              style={{ backgroundImage: `radial-gradient(circle at 1px 1px, oklch(100% 0 0 / 0.15) 1px, transparent 0)`, backgroundSize: '20px 20px' }} />
+              style={{ backgroundImage: `radial-gradient(circle at 1px 1px,white 1px,transparent 0)`, backgroundSize: '22px 22px', opacity: 0.12 }} />
+            {/* glow blob */}
+            <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full blur-2xl opacity-40"
+              style={{ background: BM }} />
           </div>
 
-          <div className="px-7 pb-7 -mt-10 flex items-end gap-5">
-            {/* Avatar */}
+          <div className="px-7 pb-7 -mt-11 flex items-end gap-5">
+            {/* avatar */}
             <div className="relative flex-shrink-0">
-              <div className="w-[72px] h-[72px] rounded-2xl flex items-center justify-center text-xl font-extrabold text-white border-[3px] border-white"
-                style={{ background: `linear-gradient(135deg, ${BM}, ${B})`, boxShadow: `0 8px 24px oklch(55% 0.18 207.078 / 0.35)` }}>
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-black text-white border-4 border-white"
+                style={{ background: `linear-gradient(135deg,${BM},${B})`, boxShadow: `0 8px 28px oklch(55% 0.18 207.078 / 0.40)` }}>
                 {initials}
               </div>
-              <button
-                className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full text-white flex items-center justify-center shadow-lg"
-                style={{ background: B, boxShadow: `0 2px 8px oklch(55% 0.18 207.078 / 0.5)` }}>
+              <button className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-white shadow-lg"
+                style={{ background: B }}>
                 <Camera size={11} />
               </button>
             </div>
 
-            {/* Info */}
-            <div className="pb-1 flex-1 min-w-0 pt-10">
-              <p className="font-extrabold text-slate-800 text-lg leading-tight truncate">
+            {/* info */}
+            <div className="pt-12 flex-1 min-w-0">
+              <p className="text-xl font-black text-slate-800 truncate leading-tight">
                 {user?.firstName} {user?.lastName}
               </p>
-              <p className="text-slate-400 text-xs mt-0.5 truncate">{user?.email}</p>
-              <div className="flex gap-1.5 mt-2">
+              <p className="text-slate-400 text-sm truncate mt-0.5">{user?.email}</p>
+              <div className="flex gap-2 mt-2.5">
                 <Badge variant={user?.role === 'owner' ? 'warning' : 'info'}>
-                  <Shield size={9} /> {user?.role}
+                  <Shield size={10} /> {user?.role}
                 </Badge>
                 <Badge variant={user?.isActive ? 'success' : 'danger'}>
                   {user?.isActive ? 'Active' : 'Inactive'}
@@ -98,9 +103,9 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* ── Personal info ── */}
-        <div className="bg-white rounded-3xl p-7" style={card}>
-          <SectionHead icon={User} label="Personal Info" />
+        {/* ── Personal Info ── */}
+        <div className="bg-white p-7" style={card}>
+          <SectionHead icon={User} title="Personal Info" />
           <form onSubmit={pf.handleSubmit(onProfile)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <Input label="First Name" placeholder="Jane" icon={User}
@@ -110,17 +115,17 @@ export default function ProfilePage() {
             </div>
             <Input label="Phone" placeholder="+250 788 000 000" icon={Phone}
               error={pf.formState.errors.phone?.message} {...pf.register('phone')} />
-            <div className="flex justify-end pt-1">
+            <div className="flex justify-end pt-2">
               <Button type="submit" loading={pf.formState.isSubmitting}>
-                <Save size={13} /> Save
+                <Save size={13} /> Save Changes
               </Button>
             </div>
           </form>
         </div>
 
         {/* ── Password ── */}
-        <div className="bg-white rounded-3xl p-7" style={card}>
-          <SectionHead icon={KeyRound} label="Change Password" />
+        <div className="bg-white p-7" style={card}>
+          <SectionHead icon={KeyRound} title="Change Password" />
           <form onSubmit={pwf.handleSubmit(onPassword)} className="space-y-4">
             <Input label="Current password" type={show.cur ? 'text' : 'password'} placeholder="••••••••" icon={Lock}
               error={pwf.formState.errors.currentPassword?.message}
@@ -136,9 +141,9 @@ export default function ProfilePage() {
                 rightElement={<button type="button" onClick={() => setShow(s => ({ ...s, cf: !s.cf }))} className="text-slate-300 hover:text-slate-500 transition-colors">{show.cf ? <EyeOff size={14} /> : <Eye size={14} />}</button>}
                 {...pwf.register('confirmPassword')} />
             </div>
-            <div className="flex justify-end pt-1">
+            <div className="flex justify-end pt-2">
               <Button type="submit" loading={pwf.formState.isSubmitting}>
-                <KeyRound size={13} /> Update
+                <KeyRound size={13} /> Update Password
               </Button>
             </div>
           </form>
