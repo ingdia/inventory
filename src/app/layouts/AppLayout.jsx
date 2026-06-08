@@ -48,13 +48,11 @@ export default function AppLayout() {
         </div>
         <div>
           <p className="font-bold text-slate-800 text-sm leading-tight">PharmaManager</p>
-          <p className="text-xs font-medium" style={{ color: BRAND }}>Healthcare System</p>
         </div>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        <p className="text-xs font-bold text-slate-300 uppercase tracking-widest px-3 pb-2">Main Menu</p>
 
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink key={to} to={to}
@@ -74,7 +72,7 @@ export default function AppLayout() {
 
         {user?.role === 'owner' && (
           <>
-            <p className="text-xs font-bold text-slate-300 uppercase tracking-widest px-3 pt-4 pb-2">Owner</p>
+            <div className="mx-3 my-2 h-px bg-slate-100" />
             <NavLink to="/users"
               className={({ isActive }) =>
                 `flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-800 hover:bg-amber-50'}`

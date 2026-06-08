@@ -162,28 +162,26 @@ export default function UserManagementPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-              <Users size={22} style={{ color: BRAND }} /> User Management
-            </h1>
-            <p className="text-slate-500 text-sm mt-1">{pagination.total} team member{pagination.total !== 1 ? 's' : ''}</p>
+            <h1 className="text-xl font-bold text-slate-800">Team Members</h1>
+            <p className="text-slate-400 text-xs mt-0.5">{pagination.total} users</p>
           </div>
-          <Button onClick={() => setModal('create')} className="gap-2">
-            <Plus size={15} /> Add User
+          <Button onClick={() => setModal('create')} className="gap-1.5">
+            <Plus size={14} /> Add User
           </Button>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Total Users', value: pagination.total, bg: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})` },
+            { label: 'Total', value: pagination.total, bg: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})` },
             { label: 'Active', value: users.filter(u => u.isActive).length, bg: 'linear-gradient(135deg, #34d399, #059669)' },
             { label: 'Owners', value: users.filter(u => u.role === 'owner').length, bg: 'linear-gradient(135deg, #fbbf24, #d97706)' },
           ].map((s) => (
-            <div key={s.label} className="bg-white rounded-2xl p-4 flex items-center gap-3 border" style={{ borderColor: 'oklch(86.5% 0.127 207.078 / 0.3)', boxShadow: '0 4px 16px oklch(55% 0.18 207.078 / 0.06)' }}>
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold text-white flex-shrink-0" style={{ background: s.bg }}>
+            <div key={s.label} className="bg-white rounded-2xl p-3 flex items-center gap-3 border" style={{ borderColor: 'oklch(86.5% 0.127 207.078 / 0.3)', boxShadow: '0 4px 16px oklch(55% 0.18 207.078 / 0.06)' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold text-white flex-shrink-0" style={{ background: s.bg }}>
                 {s.value}
               </div>
-              <p className="text-sm font-semibold text-slate-600">{s.label}</p>
+              <p className="text-xs font-semibold text-slate-500">{s.label}</p>
             </div>
           ))}
         </div>
@@ -215,15 +213,14 @@ export default function UserManagementPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-24 gap-3">
               <span className="h-10 w-10 animate-spin rounded-full border-4 border-slate-100" style={{ borderTopColor: BRAND }} />
-              <p className="text-sm text-slate-400">Loading users...</p>
+              <p className="text-xs text-slate-400">Loading...</p>
             </div>
           ) : users.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 gap-3 text-slate-400">
               <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: BRAND_LIGHT }}>
                 <Users size={28} style={{ color: BRAND_MID }} />
               </div>
-              <p className="font-medium">No users found</p>
-              <p className="text-sm">Try adjusting your search or filters.</p>
+              <p className="font-medium text-sm">No users found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
