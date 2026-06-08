@@ -6,6 +6,9 @@ import AppLayout from './layouts/AppLayout';
 import LoginPage from '../features/auth/pages/LoginPage';
 import ProfilePage from '../features/auth/pages/ProfilePage';
 import UserManagementPage from '../features/auth/pages/UserManagementPage';
+import MedicinesPage from '../features/medicines/MedicinesPage';
+import InventoryPage from '../features/inventory/InventoryPage';
+import InventoryDashboard from '../features/inventory/InventoryDashboard';
 
 // Placeholder pages for other modules
 const Placeholder = ({ title }) => (
@@ -38,7 +41,9 @@ export default function AppRouter() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
-            <Route path="/medicines" element={<Placeholder title="Medicines" />} />
+            <Route path="/medicines" element={<MedicinesPage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/inventory/dashboard" element={<InventoryDashboard />} />
             <Route path="/sales" element={<Placeholder title="Sales" />} />
             <Route path="/reports" element={<Placeholder title="Reports" />} />
             <Route path="/profile" element={<ProfilePage />} />

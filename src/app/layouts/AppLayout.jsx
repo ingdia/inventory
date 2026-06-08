@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Package, ShoppingCart, BarChart2,
-  Users, LogOut, User, ShieldCheck, Menu, X,
+  Users, LogOut, User, ShieldCheck, Menu, X, Boxes, LayoutList,
 } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -11,6 +11,8 @@ import Badge from '../../shared/components/Badge';
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/medicines', icon: Package, label: 'Medicines' },
+  { to: '/inventory/dashboard', icon: Boxes, label: 'Inv. Dashboard' },
+  { to: '/inventory', icon: LayoutList, label: 'Inventory' },
   { to: '/sales', icon: ShoppingCart, label: 'Sales' },
   { to: '/reports', icon: BarChart2, label: 'Reports' },
 ];
