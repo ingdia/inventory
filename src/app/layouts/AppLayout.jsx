@@ -5,29 +5,29 @@ import toast from 'react-hot-toast';
 import useAuthStore from '../../features/auth/store/authStore';
 import Badge from '../../shared/components/Badge';
 
-const BRAND = 'oklch(55% 0.18 207.078)';
-const BRAND_LIGHT = 'oklch(96% 0.04 207.078)';
-const BRAND_MID = 'oklch(86.5% 0.127 207.078)';
+const B  = 'oklch(55% 0.18 207.078)';
+const BL = 'oklch(96% 0.04 207.078)';
+const BM = 'oklch(86.5% 0.127 207.078)';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/medicines', icon: Package, label: 'Medicines' },
-  { to: '/sales', icon: ShoppingCart, label: 'Sales' },
-  { to: '/reports', icon: BarChart2, label: 'Reports' },
+  { to: '/medicines',  icon: Package,         label: 'Medicines'  },
+  { to: '/sales',      icon: ShoppingCart,    label: 'Sales'      },
+  { to: '/reports',    icon: BarChart2,       label: 'Reports'    },
 ];
 
-const gradients = [
-  `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})`,
-  'linear-gradient(135deg, #a78bfa, #7c3aed)',
-  'linear-gradient(135deg, #fb7185, #e11d48)',
-  'linear-gradient(135deg, #fbbf24, #d97706)',
+const avatarGrads = [
+  `linear-gradient(135deg,${BM},${B})`,
+  'linear-gradient(135deg,#a78bfa,#7c3aed)',
+  'linear-gradient(135deg,#fb7185,#e11d48)',
+  'linear-gradient(135deg,#fbbf24,#d97706)',
 ];
-const getGradient = (name = '') => gradients[name.charCodeAt(0) % gradients.length];
+const getGrad = (name = '') => avatarGrads[name.charCodeAt(0) % avatarGrads.length];
 
 export default function AppLayout() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
@@ -37,34 +37,34 @@ export default function AppLayout() {
 
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : 'U';
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-white border-r border-slate-100">
+  const Sidebar = () => (
+    <div className="flex flex-col h-full bg-white" style={{ borderRight: '1px solid oklch(93% 0.03 207.078)' }}>
 
       {/* Brand */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md"
-          style={{ background: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})`, boxShadow: `0 4px 12px oklch(55% 0.18 207.078 / 0.35)` }}>
-          <Pill size={18} className="text-white" />
+      <div className="flex items-center gap-3 px-5 py-[18px]" style={{ borderBottom: '1px solid oklch(93% 0.03 207.078)' }}>
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: `linear-gradient(135deg,${BM},${B})`, boxShadow: `0 4px 14px oklch(55% 0.18 207.078 / 0.35)` }}>
+          <Pill size={17} className="text-white" />
         </div>
-        <div>
-          <p className="font-bold text-slate-800 text-sm leading-tight">PharmaManager</p>
-        </div>
+        <span className="font-extrabold text-slate-800 text-sm tracking-tight">PharmaManager</span>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-
+      {/* Nav links */}
+      <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink key={to} to={to}
             className={({ isActive }) =>
-              `flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'}`
+              `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-150
+               ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-50'}`
             }
-            style={({ isActive }) => isActive ? { background: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})`, boxShadow: `0 4px 14px oklch(55% 0.18 207.078 / 0.3)` } : {}}
+            style={({ isActive }) => isActive
+              ? { background: `linear-gradient(135deg,${BM},${B})`, boxShadow: `0 4px 16px oklch(55% 0.18 207.078 / 0.28)` }
+              : {}}
           >
             {({ isActive }) => (
               <>
-                <span className="flex items-center gap-3"><Icon size={16} />{label}</span>
-                {isActive && <ChevronRight size={13} className="opacity-60" />}
+                <span className="flex items-center gap-3"><Icon size={15} />{label}</span>
+                {isActive && <ChevronRight size={12} className="opacity-50" />}
               </>
             )}
           </NavLink>
@@ -72,17 +72,20 @@ export default function AppLayout() {
 
         {user?.role === 'owner' && (
           <>
-            <div className="mx-3 my-2 h-px bg-slate-100" />
+            <div className="mx-2 my-3 h-px" style={{ background: 'oklch(93% 0.03 207.078)' }} />
             <NavLink to="/users"
               className={({ isActive }) =>
-                `flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-800 hover:bg-amber-50'}`
+                `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-150
+                 ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-700 hover:bg-amber-50'}`
               }
-              style={({ isActive }) => isActive ? { background: 'linear-gradient(135deg, #fbbf24, #d97706)', boxShadow: '0 4px 14px oklch(75% 0.15 75 / 0.35)' } : {}}
+              style={({ isActive }) => isActive
+                ? { background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', boxShadow: '0 4px 16px rgba(251,191,36,0.3)' }
+                : {}}
             >
               {({ isActive }) => (
                 <>
-                  <span className="flex items-center gap-3"><Users size={16} />Users</span>
-                  {isActive && <ChevronRight size={13} className="opacity-60" />}
+                  <span className="flex items-center gap-3"><Users size={15} />Users</span>
+                  {isActive && <ChevronRight size={12} className="opacity-50" />}
                 </>
               )}
             </NavLink>
@@ -90,24 +93,27 @@ export default function AppLayout() {
         )}
       </nav>
 
-      {/* User card */}
-      <div className="p-3 border-t border-slate-100">
-        <div className="rounded-2xl p-3 space-y-2.5" style={{ background: BRAND_LIGHT, border: `1px solid oklch(86.5% 0.127 207.078 / 0.4)` }}>
-          <NavLink to="/profile" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold text-white flex-shrink-0 shadow-sm"
-              style={{ background: getGradient(user?.firstName) }}>
+      {/* User footer */}
+      <div className="p-3" style={{ borderTop: '1px solid oklch(93% 0.03 207.078)' }}>
+        <div className="rounded-2xl p-3 space-y-2"
+          style={{ background: BL, border: `1.5px solid oklch(86.5% 0.127 207.078 / 0.3)` }}>
+          <NavLink to="/profile"
+            className="flex items-center gap-3 rounded-xl p-1 hover:opacity-75 transition-opacity">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
+              style={{ background: getGrad(user?.firstName), boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
               {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-slate-800 text-xs truncate">{user?.firstName} {user?.lastName}</p>
+              <p className="font-bold text-slate-700 text-xs truncate leading-tight">{user?.firstName} {user?.lastName}</p>
               <Badge variant={user?.role === 'owner' ? 'warning' : 'info'}>{user?.role}</Badge>
             </div>
-            <User size={13} className="text-slate-400 flex-shrink-0" />
+            <User size={12} className="text-slate-300 flex-shrink-0" />
           </NavLink>
 
           <button onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-white text-red-500 hover:bg-red-50 text-xs font-semibold transition-all border border-red-100">
-            <LogOut size={13} /> Sign Out
+            className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white border text-red-400 hover:text-red-500 hover:bg-red-50 text-xs font-bold transition-all"
+            style={{ borderColor: '#fecdd3' }}>
+            <LogOut size={12} /> Sign out
           </button>
         </div>
       </div>
@@ -115,31 +121,34 @@ export default function AppLayout() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: BRAND_LIGHT }}>
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 flex-shrink-0" style={{ boxShadow: `0 0 40px oklch(55% 0.18 207.078 / 0.08)` }}>
-        <SidebarContent />
+    <div className="flex h-screen overflow-hidden" style={{ background: 'oklch(97.5% 0.025 207.078)' }}>
+
+      {/* Desktop */}
+      <aside className="hidden lg:flex flex-col w-[230px] flex-shrink-0" style={{ boxShadow: `4px 0 24px oklch(55% 0.18 207.078 / 0.06)` }}>
+        <Sidebar />
       </aside>
 
       {/* Mobile overlay */}
-      {sidebarOpen && (
+      {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-          <aside className="relative z-10 w-72 h-full shadow-2xl"><SidebarContent /></aside>
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <aside className="relative z-10 w-[230px] h-full shadow-2xl"><Sidebar /></aside>
         </div>
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile topbar */}
-        <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-slate-100 shadow-sm">
+        <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white shadow-sm"
+          style={{ borderBottom: '1px solid oklch(93% 0.03 207.078)' }}>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})` }}>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+              style={{ background: `linear-gradient(135deg,${BM},${B})` }}>
               <Pill size={14} className="text-white" />
             </div>
-            <span className="font-bold text-slate-800 text-sm">PharmaManager</span>
+            <span className="font-extrabold text-slate-800 text-sm">PharmaManager</span>
           </div>
-          <button onClick={() => setSidebarOpen((v) => !v)} className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-all">
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          <button onClick={() => setOpen(v => !v)} className="p-2 rounded-xl text-slate-400 hover:bg-slate-100 transition-all">
+            {open ? <X size={19} /> : <Menu size={19} />}
           </button>
         </header>
 
