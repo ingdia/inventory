@@ -9,7 +9,15 @@ import Input from '../../../shared/components/Input';
 import Button from '../../../shared/components/Button';
 import Badge from '../../../shared/components/Badge';
 
+const BRAND = 'oklch(55% 0.18 207.078)';
+const BRAND_LIGHT = 'oklch(96% 0.04 207.078)';
+const BRAND_MID = 'oklch(86.5% 0.127 207.078)';
 const roleVariant = { owner: 'warning', pharmacist: 'info' };
+
+const card = {
+  borderColor: 'oklch(86.5% 0.127 207.078 / 0.4)',
+  boxShadow: '0 16px 48px oklch(55% 0.18 207.078 / 0.08)',
+};
 
 export default function ProfilePage() {
   const { user, updateProfile, updatePassword } = useAuthStore();
@@ -21,7 +29,6 @@ export default function ProfilePage() {
     resolver: zodResolver(updateProfileSchema),
     defaultValues: { firstName: user?.firstName, lastName: user?.lastName, phone: user?.phone || '' },
   });
-
   const passwordForm = useForm({ resolver: zodResolver(updatePasswordSchema) });
 
   const onProfileSubmit = async (data) => {
@@ -46,34 +53,36 @@ export default function ProfilePage() {
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : 'U';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-white to-teal-50 p-6">
+    <div className="min-h-screen p-6" style={{ background: BRAND_LIGHT }}>
       <div className="max-w-3xl mx-auto space-y-6">
 
-        {/* Page title */}
         <div>
           <h1 className="text-2xl font-bold text-slate-800">My Profile</h1>
           <p className="text-slate-500 text-sm mt-1">Manage your personal information and security.</p>
         </div>
 
-        {/* Profile hero card */}
-        <div className="bg-white rounded-3xl shadow-lg shadow-cyan-100/50 border border-cyan-100 overflow-hidden">
+        {/* Hero card */}
+        <div className="bg-white rounded-3xl overflow-hidden border" style={card}>
           {/* Banner */}
-          <div className="h-24 bg-gradient-to-r from-cyan-400 via-cyan-500 to-teal-500 relative">
-            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+          <div className="h-28 relative" style={{ background: `linear-gradient(135deg, ${BRAND}, oklch(45% 0.18 207.078))` }}>
+            <div className="absolute inset-0 opacity-20"
+              style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
           </div>
-          {/* Info */}
+          {/* Info row */}
           <div className="px-8 pb-8 -mt-10 flex items-end gap-5">
-            <div className="relative">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-cyan-200 border-4 border-white">
+            <div className="relative flex-shrink-0">
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold text-white border-4 border-white"
+                style={{ background: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})`, boxShadow: `0 8px 24px oklch(55% 0.18 207.078 / 0.35)` }}>
                 {initials}
               </div>
-              <button className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-cyan-500 text-white flex items-center justify-center shadow">
+              <button className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full text-white flex items-center justify-center shadow-md"
+                style={{ background: BRAND }}>
                 <Camera size={11} />
               </button>
             </div>
-            <div className="pb-1 flex-1">
-              <h2 className="text-xl font-bold text-slate-800">{user?.firstName} {user?.lastName}</h2>
-              <p className="text-slate-500 text-sm">{user?.email}</p>
+            <div className="pb-1 flex-1 min-w-0">
+              <h2 className="text-xl font-bold text-slate-800 truncate">{user?.firstName} {user?.lastName}</h2>
+              <p className="text-slate-500 text-sm truncate">{user?.email}</p>
               <div className="flex gap-2 mt-2">
                 <Badge variant={roleVariant[user?.role] || 'default'}>
                   <Shield size={10} /> {user?.role}
@@ -86,18 +95,17 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Personal info form */}
-        <div className="bg-white rounded-3xl shadow-lg shadow-cyan-100/50 border border-cyan-100 p-8">
+        {/* Personal info */}
+        <div className="bg-white rounded-3xl p-8 border" style={card}>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center">
-              <User size={16} className="text-cyan-600" />
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: BRAND_LIGHT }}>
+              <User size={16} style={{ color: BRAND }} />
             </div>
             <div>
               <h3 className="font-bold text-slate-800">Personal Information</h3>
               <p className="text-xs text-slate-400">Update your name and contact details.</p>
             </div>
           </div>
-
           <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="First Name" placeholder="Jane" icon={User}
@@ -118,31 +126,30 @@ export default function ProfilePage() {
           </form>
         </div>
 
-        {/* Password form */}
-        <div className="bg-white rounded-3xl shadow-lg shadow-cyan-100/50 border border-cyan-100 p-8">
+        {/* Password */}
+        <div className="bg-white rounded-3xl p-8 border" style={card}>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center">
-              <Lock size={16} className="text-cyan-600" />
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: BRAND_LIGHT }}>
+              <Lock size={16} style={{ color: BRAND }} />
             </div>
             <div>
               <h3 className="font-bold text-slate-800">Change Password</h3>
               <p className="text-xs text-slate-400">Keep your account secure with a strong password.</p>
             </div>
           </div>
-
           <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
             <Input label="Current Password" type={showCurrent ? 'text' : 'password'} placeholder="••••••••" icon={Lock}
               error={passwordForm.formState.errors.currentPassword?.message}
-              rightElement={<button type="button" onClick={() => setShowCurrent(v => !v)} className="text-slate-400 hover:text-cyan-500">{showCurrent ? <EyeOff size={15} /> : <Eye size={15} />}</button>}
+              rightElement={<button type="button" onClick={() => setShowCurrent(v => !v)} className="text-slate-400">{showCurrent ? <EyeOff size={15} /> : <Eye size={15} />}</button>}
               {...passwordForm.register('currentPassword')} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="New Password" type={showNew ? 'text' : 'password'} placeholder="Min 8 chars" icon={Lock}
                 error={passwordForm.formState.errors.newPassword?.message}
-                rightElement={<button type="button" onClick={() => setShowNew(v => !v)} className="text-slate-400 hover:text-cyan-500">{showNew ? <EyeOff size={15} /> : <Eye size={15} />}</button>}
+                rightElement={<button type="button" onClick={() => setShowNew(v => !v)} className="text-slate-400">{showNew ? <EyeOff size={15} /> : <Eye size={15} />}</button>}
                 {...passwordForm.register('newPassword')} />
               <Input label="Confirm Password" type={showConfirm ? 'text' : 'password'} placeholder="Repeat password" icon={Lock}
                 error={passwordForm.formState.errors.confirmPassword?.message}
-                rightElement={<button type="button" onClick={() => setShowConfirm(v => !v)} className="text-slate-400 hover:text-cyan-500">{showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}</button>}
+                rightElement={<button type="button" onClick={() => setShowConfirm(v => !v)} className="text-slate-400">{showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}</button>}
                 {...passwordForm.register('confirmPassword')} />
             </div>
             <div className="flex justify-end pt-2">
