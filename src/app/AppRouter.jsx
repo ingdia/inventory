@@ -7,8 +7,9 @@ import LoginPage from '../features/auth/pages/LoginPage';
 import SignupPage from '../features/auth/pages/SignupPage';
 import ProfilePage from '../features/auth/pages/ProfilePage';
 import UserManagementPage from '../features/auth/pages/UserManagementPage';
+import DashboardPage from '../features/dashboard/DashboardPage';
+import { SalesReportPage, InventoryReportPage, ProfitLossPage, PurchasesReportPage } from '../features/reports';
 
-// Placeholder pages for other modules
 const Placeholder = ({ title }) => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="text-center">
@@ -47,10 +48,13 @@ export default function AppRouter() {
         {/* Protected — all authenticated users */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/medicines" element={<Placeholder title="Medicines" />} />
             <Route path="/sales" element={<Placeholder title="Sales" />} />
-            <Route path="/reports" element={<Placeholder title="Reports" />} />
+            <Route path="/reports/sales" element={<SalesReportPage />} />
+            <Route path="/reports/inventory" element={<InventoryReportPage />} />
+            <Route path="/reports/profit-loss" element={<ProfitLossPage />} />
+            <Route path="/reports/purchases" element={<PurchasesReportPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             {/* Owner only — handled inside AppLayout nav guard */}
             <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
