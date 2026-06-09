@@ -19,8 +19,7 @@ export default function PurchasesReportPage() {
 
   useEffect(() => { fetch(filters); }, []);
 
-  const { data: purchases = [], summary } = purchasesReport;
-  const rows = purchases?.purchases || purchases;
+  const { data: rows = [], summary } = purchasesReport;
 
   const csvHeaders = ['Invoice No', 'Date', 'Supplier', 'Items', 'Total Amount', 'Status', 'Recorded By'];
   const csvRows = rows.map((p) => [
