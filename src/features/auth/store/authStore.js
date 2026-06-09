@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { authService } from '../services/auth.service';
+import toast from 'react-hot-toast';
 
 const useAuthStore = create((set) => ({
   user: null,
-  accessToken: null,
+  token: null,
   isAuthenticated: false,
   isLoading: false,
 
@@ -14,7 +15,7 @@ const useAuthStore = create((set) => ({
       const token = data.token;
       const user = data.user;
       localStorage.setItem('token', token);
-      set({ user, accessToken: token, isAuthenticated: true, isLoading: false });
+      set({ user, token, isAuthenticated: true, isLoading: false });
       return user;
     } catch (err) {
       set({ isLoading: false });
@@ -23,19 +24,26 @@ const useAuthStore = create((set) => ({
   },
 
   logout: async () => {
+    try { await authService.logout(); } catch { /* silent */ }
     localStorage.removeItem('token');
-    set({ user: null, accessToken: null, isAuthenticated: false });
+    set({ user: null, token: null, isAuthenticated: false });
   },
 
-  fetchMe: async () => {
-    const { data } = await authService.getMe();
-    set({ user: data, isAuthenticated: true });
+  fetchProfile: async () => {
+    try {
+      const { data } = await authService.getMe();
+      set({ user: data, isAuthenticated: true });
+    } catch {
+      localStorage.removeItem('token');
+      set({ user: null, token: null, isAuthenticated: false });
+    }
   },
 
   updateProfile: async (profileData) => {
     const { data } = await authService.updateProfile(profileData);
-    set({ user: data.data.user });
-    return data.data.user;
+    const user = data.user ?? data;
+    set({ user });
+    return user;
   },
 
   updatePassword: async (passwords) => {
