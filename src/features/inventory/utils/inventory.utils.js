@@ -9,10 +9,10 @@ export function getStockStatus(item) {
 }
 
 export const stockBadgeVariant = {
-  in_stock: 'success',
+  in_stock: 'cyan',
   low_stock: 'warning',
   out_of_stock: 'danger',
-  expired: 'danger',
+  expired: 'crimson',
 };
 
 export const stockStatusLabel = {

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { inventoryService } from '../services/inventory.service';
+import { medicinesService } from '../../medicines/services/medicines.service';
 import toast from 'react-hot-toast';
 
 const useInventoryStore = create((set, get) => ({
@@ -25,6 +26,21 @@ const useInventoryStore = create((set, get) => ({
       const msg = err.response?.data?.message || 'Failed to fetch inventory';
       toast.error(msg);
       set({ loading: false });
+    }
+  },
+
+  fetchAlerts: async () => {
+    try {
+      const [lowRes, expiringRes] = await Promise.all([
+        medicinesService.getLowStock(),
+        medicinesService.getExpiring(),
+      ]);
+      set({
+        lowStockItems: lowRes.data.data || [],
+        expiringItems: expiringRes.data.data || [],
+      });
+    } catch {
+      // silent — alerts are non-critical
     }
   },
 
