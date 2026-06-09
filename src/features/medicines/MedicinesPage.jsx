@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Download } from 'lucide-react';
 import { useMedicines } from './hooks/useMedicines';
 import MedicineTable from './components/MedicineTable';
@@ -10,6 +10,7 @@ import Pagination from '../../shared/components/Pagination';
 import Button from '../../shared/components/Button';
 import EmptyState from '../../shared/components/EmptyState';
 import { exportMedicinesToCSV } from './utils/medicine.utils';
+import { inventoryService } from '../inventory/services/inventory.service';
 
 export default function MedicinesPage() {
   const {
@@ -24,6 +25,19 @@ export default function MedicinesPage() {
   const [editing, setEditing] = useState(null);
   const [deleting, setDeleting] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
+  const [inventoryMap, setInventoryMap] = useState({});
+
+  useEffect(() => {
+    inventoryService.getAll({ limit: 1000 })
+      .then(({ data }) => {
+        const map = {};
+        (data.data?.inventory || []).forEach((item) => {
+          if (item.medicine?._id) map[item.medicine._id] = item.quantity;
+        });
+        setInventoryMap(map);
+      })
+      .catch(() => {});
+  }, [medicines]);
 
   const openAdd = () => { setEditing(null); setFormOpen(true); };
   const openEdit = (med) => { setEditing(med); setFormOpen(true); };
@@ -88,6 +102,7 @@ export default function MedicinesPage() {
           onSort={handleSort}
           sortBy={filters.sortBy}
           sortOrder={filters.sortOrder}
+          inventoryMap={inventoryMap}
         />
       )}
 
@@ -95,12 +110,7 @@ export default function MedicinesPage() {
       <Pagination page={pagination.page} totalPages={pagination.totalPages} onPageChange={handlePageChange} />
 
       {/* Add / Edit Modal */}
-      <Modal
-        open={formOpen}
-        onClose={closeForm}
-        title={editing ? 'Edit Medicine' : 'Add Medicine'}
-        size="lg"
-      >
+      <Modal open={formOpen} onClose={closeForm} title={editing ? 'Edit Medicine' : 'Add Medicine'} size="lg">
         <MedicineForm
           defaultValues={editing}
           categories={categories}

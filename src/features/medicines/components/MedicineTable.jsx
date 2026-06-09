@@ -6,7 +6,7 @@ import { formatCurrency } from '../../../shared/utils/formatCurrency';
 
 const statusVariant = { active: 'success', inactive: 'default' };
 
-export default function MedicineTable({ medicines, loading, onEdit, onDelete, onSort, sortBy, sortOrder }) {
+export default function MedicineTable({ medicines, loading, onEdit, onDelete, onSort, sortBy, sortOrder, inventoryMap = {} }) {
   const columns = [
     { key: 'name', label: 'Name', sortable: true, render: (m) => (
       <div>
@@ -17,7 +17,13 @@ export default function MedicineTable({ medicines, loading, onEdit, onDelete, on
     { key: 'category', label: 'Category', render: (m) => m.category?.name || '—' },
     { key: 'supplier', label: 'Supplier', render: (m) => m.supplier?.name || '—' },
     { key: 'unit', label: 'Unit', render: (m) => <span className="capitalize">{m.unit}</span> },
-    { key: 'sellingPrice', label: 'Selling Price', sortable: true, render: (m) => formatCurrency(m.sellingPrice) },
+    { key: 'sellingPrice', label: 'Unit Price', sortable: true, render: (m) => formatCurrency(m.sellingPrice) },
+    { key: 'stock', label: 'Stock Qty', render: (m) => {
+      const qty = inventoryMap[m._id];
+      if (qty == null) return <span className="text-slate-500">—</span>;
+      const low = qty <= (m.reorderLevel ?? 10);
+      return <span className={qty === 0 ? 'text-red-400 font-semibold' : low ? 'text-amber-400 font-semibold' : 'text-emerald-400 font-semibold'}>{qty}</span>;
+    }},
     { key: 'expiryDate', label: 'Expiry Date', render: (m) => {
       const expired = isExpired(m.expiryDate);
       const expiring = isExpiringSoon(m.expiryDate);
