@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, BarChart2, Users, LogOut, User, Pill, Menu, X, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, BarChart2, Users, LogOut, User, Pill, Menu, X, ChevronRight, TrendingUp, FileText, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../features/auth/store/authStore';
@@ -10,10 +10,16 @@ const BL = 'oklch(96% 0.04 207.078)';
 const BM = 'oklch(86.5% 0.127 207.078)';
 
 const navItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/medicines',  icon: Package,         label: 'Medicines'  },
-  { to: '/sales',      icon: ShoppingCart,    label: 'Sales'      },
-  { to: '/reports',    icon: BarChart2,       label: 'Reports'    },
+  { to: '/dashboard',          icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/medicines',          icon: Package,         label: 'Medicines'  },
+  { to: '/sales',              icon: ShoppingCart,    label: 'Sales'      },
+];
+
+const reportItems = [
+  { to: '/reports/sales',      icon: BarChart2,   label: 'Sales Report'      },
+  { to: '/reports/inventory',  icon: FileText,    label: 'Inventory Report'  },
+  { to: '/reports/profit-loss',icon: TrendingUp,  label: 'Profit & Loss'     },
+  { to: '/reports/purchases',  icon: ShoppingBag, label: 'Purchases Report'  },
 ];
 
 const avatarGrads = [
@@ -52,6 +58,27 @@ export default function AppLayout() {
       {/* Nav links */}
       <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
         {navItems.map(({ to, icon: Icon, label }) => (
+          <NavLink key={to} to={to}
+            className={({ isActive }) =>
+              `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-150
+               ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-50'}`
+            }
+            style={({ isActive }) => isActive
+              ? { background: `linear-gradient(135deg,${BM},${B})`, boxShadow: `0 4px 16px oklch(55% 0.18 207.078 / 0.28)` }
+              : {}}
+          >
+            {({ isActive }) => (
+              <>
+                <span className="flex items-center gap-3"><Icon size={15} />{label}</span>
+                {isActive && <ChevronRight size={12} className="opacity-50" />}
+              </>
+            )}
+          </NavLink>
+        ))}
+
+        <div className="mx-2 my-3 h-px" style={{ background: 'oklch(93% 0.03 207.078)' }} />
+        <p className="px-3.5 text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Reports</p>
+        {reportItems.map(({ to, icon: Icon, label }) => (
           <NavLink key={to} to={to}
             className={({ isActive }) =>
               `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-150
@@ -121,7 +148,7 @@ export default function AppLayout() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'oklch(97.5% 0.025 207.078)' }}>
+    <div className="flex h-screen overflow-hidden bg-gray-100">
 
       {/* Desktop */}
       <aside className="hidden lg:flex flex-col w-[230px] flex-shrink-0" style={{ boxShadow: `4px 0 24px oklch(55% 0.18 207.078 / 0.06)` }}>

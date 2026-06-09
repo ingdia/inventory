@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { User, Lock } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+import toast from 'react-hot-toast';
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -8,6 +11,8 @@ const SignInPage = () => {
     password: '',
     rememberMe: false
   });
+  const navigate = useNavigate();
+  const { login, isLoading } = useAuthStore();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -17,8 +22,15 @@ const SignInPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      await login({ username: formData.username, password: formData.password });
+      toast.success('Welcome back! 👋');
+      navigate('/dashboard', { replace: true });
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Invalid credentials');
+    }
   };
 
   return (
@@ -128,9 +140,10 @@ const SignInPage = () => {
               {/* Sign In Button (Dark Navy) */}
               <button
                 type="submit"
-                className="w-full bg-[#1a3c6e] hover:bg-[#142e56] text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-sm mt-4"
+                className="w-full bg-[#1a3c6e] hover:bg-[#142e56] text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-sm mt-4 disabled:opacity-60"
+                disabled={isLoading}
               >
-                Sign in
+                {isLoading ? 'Signing in...' : 'Sign in'}
               </button>
 
               {/* Alternative Sign In (White with border) */}
@@ -144,9 +157,9 @@ const SignInPage = () => {
               {/* Sign Up Link */}
               <p className="text-center text-[11px] text-gray-500 mt-6">
                 Don't have an account?{' '}
-                <a href="#" className="text-[#2b78c2] hover:text-blue-800 font-bold transition-colors">
+                <Link to="/signup" className="text-[#2b78c2] hover:text-blue-800 font-bold transition-colors">
                   Sign up
-                </a>
+                </Link>
               </p>
             </form>
           </div>
