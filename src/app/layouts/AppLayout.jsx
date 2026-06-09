@@ -121,7 +121,7 @@ export default function AppLayout() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'oklch(97.5% 0.025 207.078)' }}>
+    <div className="flex h-screen overflow-hidden bg-gray-100">
 
       {/* Desktop */}
       <aside className="hidden lg:flex flex-col w-[230px] flex-shrink-0" style={{ boxShadow: `4px 0 24px oklch(55% 0.18 207.078 / 0.06)` }}>

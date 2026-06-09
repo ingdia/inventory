@@ -4,14 +4,15 @@ import GuestRoute from './routes/GuestRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
 import LoginPage from '../features/auth/pages/LoginPage';
+import SignupPage from '../features/auth/pages/SignupPage';
 import ProfilePage from '../features/auth/pages/ProfilePage';
 import UserManagementPage from '../features/auth/pages/UserManagementPage';
 
 // Placeholder pages for other modules
 const Placeholder = ({ title }) => (
-  <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+  <div className="min-h-screen flex items-center justify-center">
     <div className="text-center">
-      <h1 className="text-2xl font-bold text-white">{title}</h1>
+      <h1 className="text-2xl font-bold text-slate-700">{title}</h1>
       <p className="text-slate-400 mt-2">Coming soon — being built by the team.</p>
     </div>
   </div>
@@ -40,6 +41,7 @@ export default function AppRouter() {
         {/* Guest only */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Route>
 
         {/* Protected — all authenticated users */}
@@ -50,13 +52,10 @@ export default function AppRouter() {
             <Route path="/sales" element={<Placeholder title="Sales" />} />
             <Route path="/reports" element={<Placeholder title="Reports" />} />
             <Route path="/profile" element={<ProfilePage />} />
-          </Route>
-        </Route>
-
-        {/* Protected — owner only */}
-        <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
-          <Route element={<AppLayout />}>
-            <Route path="/users" element={<UserManagementPage />} />
+            {/* Owner only — handled inside AppLayout nav guard */}
+            <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
+              <Route path="/users" element={<UserManagementPage />} />
+            </Route>
           </Route>
         </Route>
 
