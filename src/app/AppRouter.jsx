@@ -42,8 +42,8 @@ export default function AppRouter() {
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
             <Route path="/medicines" element={<MedicinesPage />} />
-            <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/inventory/dashboard" element={<InventoryDashboard />} />
+            <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/sales" element={<Placeholder title="Sales" />} />
             <Route path="/reports" element={<Placeholder title="Reports" />} />
             <Route path="/profile" element={<ProfilePage />} />
