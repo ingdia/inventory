@@ -1,5 +1,6 @@
 import api from '../../../shared/services/api';
 import { API_ROUTES } from '../../../shared/constants/api.constants';
+import axiosInstance from '@/shared/services/axiosInstance';
 
 export const medicinesService = {
   getAll: (params) => api.get(API_ROUTES.MEDICINES, { params }),
@@ -13,3 +14,8 @@ export const medicinesService = {
   getCategories: () => api.get(API_ROUTES.CATEGORIES),
   getSuppliers: () => api.get(API_ROUTES.SUPPLIERS),
 };
+
+export const getMedicines = (params) => axiosInstance.get('/medicines', { params });
+export const createMedicine = (data) => axiosInstance.post('/medicines', data);
+export const updateMedicine = (id, data) => axiosInstance.put(`/medicines/${id}`, data);
+export const deleteMedicine = (id) => axiosInstance.delete(`/medicines/${id}`);
