@@ -103,10 +103,10 @@ export default function AppLayout() {
             <NavLink to="/users"
               className={({ isActive }) =>
                 `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-150
-                 ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-50'}`
+                 ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-700 hover:bg-amber-50'}`
               }
               style={({ isActive }) => isActive
-                ? { background: `linear-gradient(135deg,${BM},${B})`, boxShadow: `0 4px 16px oklch(55% 0.18 207.078 / 0.28)` }
+                ? { background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', boxShadow: '0 4px 16px rgba(251,191,36,0.3)' }
                 : {}}
             >
               {({ isActive }) => (
