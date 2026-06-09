@@ -6,14 +6,13 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+  name: z.string().min(1, 'Name is required'),
   email: z.string().email('Enter a valid email'),
   password: z
     .string()
     .min(8, 'At least 8 characters')
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Must include uppercase, lowercase and number'),
-  role: z.enum(['owner', 'pharmacist']).default('pharmacist'),
+  role: z.enum(['Owner', 'Pharmacist']).default('Pharmacist'),
   phone: z.string().optional(),
 });
 
@@ -32,7 +31,6 @@ export const updatePasswordSchema = z
   });
 
 export const updateProfileSchema = z.object({
-  firstName: z.string().min(1, 'Required'),
-  lastName: z.string().min(1, 'Required'),
+  name: z.string().min(1, 'Required'),
   phone: z.string().optional(),
 });

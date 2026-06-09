@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Users, Plus, Search, UserCheck, UserX, Pencil, X,
-  Mail, Phone, Shield, ChevronLeft, ChevronRight, UserCircle,
+  Mail, Phone, Shield, ChevronLeft, ChevronRight, UserCircle, Trash2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { registerSchema, updateProfileSchema } from '../utils/schemas';
@@ -11,11 +11,12 @@ import { userService } from '../services/auth.service';
 import Input from '../../../shared/components/Input';
 import Button from '../../../shared/components/Button';
 import Badge from '../../../shared/components/Badge';
+import ConfirmDialog from '../../../shared/components/ConfirmDialog';
 
 const BRAND = 'oklch(55% 0.18 207.078)';
 const BRAND_LIGHT = 'oklch(96% 0.04 207.078)';
 const BRAND_MID = 'oklch(86.5% 0.127 207.078)';
-const roleVariant = { owner: 'warning', pharmacist: 'info' };
+const roleVariant = { Owner: 'warning', Pharmacist: 'info' };
 
 const gradients = [
   'linear-gradient(135deg, oklch(70% 0.18 207.078), oklch(50% 0.18 207.078))',
@@ -39,8 +40,8 @@ function UserModal({ user, onClose, onSaved }) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(schema),
     defaultValues: isEdit
-      ? { firstName: user.firstName, lastName: user.lastName, phone: user.phone || '' }
-      : { role: 'pharmacist' },
+      ? { name: user.name, phone: user.phone || '' }
+      : { role: 'Pharmacist' },
   });
 
   const onSubmit = async (data) => {
@@ -79,10 +80,7 @@ function UserModal({ user, onClose, onSaved }) {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <Input label="First Name" placeholder="Jane" icon={UserCircle} error={errors.firstName?.message} {...register('firstName')} />
-            <Input label="Last Name" placeholder="Doe" icon={UserCircle} error={errors.lastName?.message} {...register('lastName')} />
-          </div>
+          <Input label="Full Name" placeholder="Jane Doe" icon={UserCircle} error={errors.name?.message} {...register('name')} />
           {!isEdit && (
             <>
               <Input label="Email" type="email" placeholder="jane@pharmacy.com" icon={Mail} error={errors.email?.message} {...register('email')} />
@@ -93,8 +91,8 @@ function UserModal({ user, onClose, onSaved }) {
                   className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition-all hover:border-slate-300"
                   onFocus={(e) => { e.target.style.borderColor = BRAND; e.target.style.boxShadow = `0 0 0 4px oklch(86.5% 0.127 207.078 / 0.25)`; }}
                   onBlur={(e) => { e.target.style.borderColor = ''; e.target.style.boxShadow = ''; }}>
-                  <option value="pharmacist">Pharmacist</option>
-                  <option value="owner">Owner</option>
+                  <option value="Pharmacist">Pharmacist</option>
+                  <option value="Owner">Owner</option>
                 </select>
                 {errors.role && <p className="text-xs text-red-500 font-medium">{errors.role.message}</p>}
               </div>
@@ -120,6 +118,8 @@ export default function UserManagementPage() {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [modal, setModal] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchUsers = useCallback(async () => {
@@ -140,14 +140,28 @@ export default function UserManagementPage() {
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
+  const handleDelete = async () => {
+    setDeleteLoading(true);
+    try {
+      await userService.deactivate(deleting._id);
+      toast.success(`${deleting.name} deleted.`);
+      setDeleting(null);
+      fetchUsers();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Delete failed.');
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   const handleToggleActive = async (u) => {
     try {
       if (u.isActive) {
         await userService.deactivate(u._id);
-        toast.success(`${u.firstName} deactivated.`);
+        toast.success(`${u.name} deactivated.`);
       } else {
         await userService.activate(u._id);
-        toast.success(`${u.firstName} activated.`);
+        toast.success(`${u.name} activated.`);
       }
       fetchUsers();
     } catch (err) {
@@ -175,7 +189,7 @@ export default function UserManagementPage() {
           {[
             { label: 'Total', value: pagination.total, bg: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})` },
             { label: 'Active', value: users.filter(u => u.isActive).length, bg: 'linear-gradient(135deg, #34d399, #059669)' },
-            { label: 'Owners', value: users.filter(u => u.role === 'owner').length, bg: 'linear-gradient(135deg, #fbbf24, #d97706)' },
+            { label: 'Owners', value: users.filter(u => u.role === 'Owner').length, bg: 'linear-gradient(135deg, #fbbf24, #d97706)' },
           ].map((s) => (
             <div key={s.label} className="bg-white rounded-2xl p-3 flex items-center gap-3 border" style={{ borderColor: 'oklch(86.5% 0.127 207.078 / 0.3)', boxShadow: '0 4px 16px oklch(55% 0.18 207.078 / 0.06)' }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold text-white flex-shrink-0" style={{ background: s.bg }}>
@@ -203,8 +217,8 @@ export default function UserManagementPage() {
             onFocus={(e) => { e.target.style.borderColor = BRAND; e.target.style.boxShadow = '0 0 0 4px oklch(86.5% 0.127 207.078 / 0.25)'; }}
             onBlur={(e) => { e.target.style.borderColor = ''; e.target.style.boxShadow = ''; }}>
             <option value="">All Roles</option>
-            <option value="owner">Owner</option>
-            <option value="pharmacist">Pharmacist</option>
+            <option value="Owner">Owner</option>
+            <option value="Pharmacist">Pharmacist</option>
           </select>
         </div>
 
@@ -234,17 +248,17 @@ export default function UserManagementPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {users.map((u) => {
-                    const initials = `${u.firstName[0]}${u.lastName[0]}`.toUpperCase();
+                    const initials = u.name ? u.name.slice(0, 2).toUpperCase() : '??';
                     return (
                       <tr key={u._id} className="hover:bg-slate-50/70 transition-colors group">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold text-white flex-shrink-0 shadow-sm"
-                              style={{ background: getGradient(u.firstName) }}>
+                              style={{ background: getGradient(u.name) }}>
                               {initials}
                             </div>
                             <div>
-                              <p className="font-semibold text-slate-800 text-sm">{u.firstName} {u.lastName}</p>
+                              <p className="font-semibold text-slate-800 text-sm">{u.name}</p>
                               <p className="text-slate-400 text-xs">{u.email}</p>
                             </div>
                           </div>
@@ -268,6 +282,13 @@ export default function UserManagementPage() {
                               onMouseLeave={(e) => { e.currentTarget.style.background = ''; e.currentTarget.style.color = ''; }}
                               title="Edit">
                               <Pencil size={14} />
+                            </button>
+                            <button onClick={() => setDeleting(u)}
+                              className="p-2 rounded-xl text-slate-400 transition-all"
+                              onMouseEnter={(e) => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.color = '#ef4444'; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = ''; e.currentTarget.style.color = ''; }}
+                              title="Delete">
+                              <Trash2 size={14} />
                             </button>
                             <button onClick={() => handleToggleActive(u)}
                               className="p-2 rounded-xl text-slate-400 transition-all"
@@ -302,6 +323,14 @@ export default function UserManagementPage() {
       </div>
 
       {modal && <UserModal user={modal === 'create' ? null : modal} onClose={() => setModal(null)} onSaved={fetchUsers} />}
+      <ConfirmDialog
+        open={!!deleting}
+        onClose={() => setDeleting(null)}
+        onConfirm={handleDelete}
+        loading={deleteLoading}
+        title="Delete User"
+        message={`Delete "${deleting?.name}"? This cannot be undone.`}
+      />
     </div>
   );
 }

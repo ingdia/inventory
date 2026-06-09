@@ -11,7 +11,6 @@ import Button from '../../shared/components/Button';
 import EmptyState from '../../shared/components/EmptyState';
 import { exportMedicinesToCSV } from './utils/medicine.utils';
 import { inventoryService } from '../inventory/services/inventory.service';
-import { getMedicines } from './services/medicines.service';
 
 export default function MedicinesPage() {
   const {
@@ -21,13 +20,6 @@ export default function MedicinesPage() {
     addMedicine, updateMedicine, deleteMedicine,
     setFilters, fetchMedicines,
   } = useMedicines();
-
-  // TEMP TEST
-  useEffect(() => {
-    getMedicines()
-      .then((res) => console.log(res.data))
-      .catch((err) => console.error(err));
-  }, []);
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
