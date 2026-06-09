@@ -39,14 +39,47 @@
   --color-white: #ffffff;
 }
 
+:root {
+  --brand: oklch(86.5% 0.127 207.078);
+  --brand-deep: oklch(55% 0.18 207.078);
+  --brand-soft: oklch(96% 0.04 207.078);
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
-  background-color: #020617;
-  color: #f1f5f9;
+  background-color: var(--brand-soft);
+  color: #0f172a;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 99px; }
+
+.bg-brand { background-color: var(--brand); }
+.bg-brand-deep { background-color: var(--brand-deep); }
+.bg-brand-soft { background-color: var(--brand-soft); }
+.text-brand { color: var(--brand-deep); }
+.border-brand { border-color: var(--brand); }
+.ring-brand { --tw-ring-color: var(--brand); }
+.shadow-brand { box-shadow: 0 8px 32px oklch(86.5% 0.127 207.078 / 0.35); }
+
+.auth-bg {
+  position: relative;
+  background-image: url('/src/assets/pharmacy-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.auth-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: oklch(55% 0.18 207.078 / 0.82);
+  backdrop-filter: blur(1px);
 }
