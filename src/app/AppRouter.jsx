@@ -7,6 +7,9 @@ import LoginPage from '../features/auth/pages/LoginPage';
 import SignupPage from '../features/auth/pages/SignupPage';
 import ProfilePage from '../features/auth/pages/ProfilePage';
 import UserManagementPage from '../features/auth/pages/UserManagementPage';
+import MedicinesPage from '../features/medicines/MedicinesPage';
+import InventoryPage from '../features/inventory/InventoryPage';
+import InventoryDashboard from '../features/inventory/InventoryDashboard';
 import DashboardPage from '../features/dashboard/DashboardPage';
 import { SalesReportPage, InventoryReportPage, ProfitLossPage, PurchasesReportPage } from '../features/reports';
 
@@ -49,14 +52,15 @@ export default function AppRouter() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/medicines" element={<Placeholder title="Medicines" />} />
+            <Route path="/medicines" element={<MedicinesPage />} />
+            <Route path="/inventory/dashboard" element={<InventoryDashboard />} />
+            <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/sales" element={<Placeholder title="Sales" />} />
             <Route path="/reports/sales" element={<SalesReportPage />} />
             <Route path="/reports/inventory" element={<InventoryReportPage />} />
             <Route path="/reports/profit-loss" element={<ProfitLossPage />} />
             <Route path="/reports/purchases" element={<PurchasesReportPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            {/* Owner only — handled inside AppLayout nav guard */}
             <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
               <Route path="/users" element={<UserManagementPage />} />
             </Route>
