@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
   withCredentials: true,
 });
 
-// Attach access token to every request
+// Attach token to every request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -43,8 +43,8 @@ api.interceptors.response.use(
 
       try {
         const { data } = await api.post('/auth/refresh');
-        const newToken = data.data.accessToken;
-        localStorage.setItem('accessToken', newToken);
+        const newToken = data.token;
+        localStorage.setItem('token', newToken);
         processQueue(null, newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return api(originalRequest);

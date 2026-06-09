@@ -10,21 +10,27 @@ const useAuthStore = create((set) => ({
 
   login: async (credentials) => {
     set({ isLoading: true });
-    const { data } = await authService.login(credentials);
-    const { accessToken, user } = data.data;
-    localStorage.setItem('accessToken', accessToken);
-    set({ user, accessToken, isAuthenticated: true, isLoading: false });
-    return user;
+    try {
+      const { data } = await authService.login(credentials);
+      const token = data.token;
+      const user = data.user;
+      localStorage.setItem('token', token);
+      set({ user, accessToken: token, isAuthenticated: true, isLoading: false });
+      return user;
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
   },
 
   logout: async () => {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('token');
     set({ user: null, accessToken: null, isAuthenticated: false });
   },
 
   fetchMe: async () => {
     const { data } = await authService.getMe();
-    set({ user: data.data.user, isAuthenticated: true });
+    set({ user: data, isAuthenticated: true });
   },
 
   updateProfile: async (profileData) => {

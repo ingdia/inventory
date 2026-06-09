@@ -4,7 +4,7 @@ export const authService = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (data) => api.post('/auth/register', data),
   logout: () => api.post('/auth/logout'),
-  getMe: () => api.get('/auth/me'),
+  getMe: () => api.get('/profile'),
   updatePassword: (data) => api.patch('/auth/update-password', data),
   updateProfile: (data) => api.patch('/users/profile', data),
 };
