@@ -7,6 +7,8 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../features/auth/store/authStore';
 import Badge from '../../shared/components/Badge';
+import AlertDrawer from '../../shared/components/AlertDrawer';
+import ThemeToggle from '../../shared/components/ThemeToggle';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -139,15 +141,19 @@ export default function AppLayout() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Mobile topbar */}
-        <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800">
+        {/* Topbar — mobile + desktop */}
+        <header className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800">
           <div className="flex items-center gap-2">
-            <ShieldCheck size={18} className="text-emerald-400" />
-            <span className="font-bold text-white text-sm">PharmaManager</span>
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+              <Menu size={20} />
+            </button>
+            <ShieldCheck size={18} className="text-emerald-400 hidden lg:block" />
+            <span className="font-bold text-white text-sm hidden lg:block">PharmaManager</span>
           </div>
-          <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <AlertDrawer />
+          </div>
         </header>
 
         {/* Page content */}
