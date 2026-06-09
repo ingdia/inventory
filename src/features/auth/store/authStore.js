@@ -5,6 +5,7 @@ const useAuthStore = create((set) => ({
   user: { firstName: 'Demo', lastName: 'User', role: 'owner' },
   accessToken: 'mock-token',
   isAuthenticated: true,
+  isInitialized: true,
   isLoading: false,
 
   login: async (credentials) => {

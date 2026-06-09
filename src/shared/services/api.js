@@ -50,8 +50,14 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        localStorage.removeItem('accessToken');
-        window.location.href = '/login';
+        // Only redirect to login if we have a real token that expired
+        // Do not redirect during development with mock token
+        const hasRealToken = localStorage.getItem('accessToken') && 
+          localStorage.getItem('accessToken') !== 'mock-token';
+        if (hasRealToken) {
+          localStorage.removeItem('accessToken');
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
