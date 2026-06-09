@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, BarChart2, Users, LogOut, User, Pill, Menu, X, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, BarChart2, Users, LogOut, User, Pill, Menu, X, ChevronRight, ClipboardList, Monitor } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../features/auth/store/authStore';
@@ -12,7 +12,9 @@ const BM = 'oklch(86.5% 0.127 207.078)';
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/medicines',  icon: Package,         label: 'Medicines'  },
+  { to: '/pos',        icon: Monitor,         label: 'POS'        },
   { to: '/sales',      icon: ShoppingCart,    label: 'Sales'      },
+  { to: '/purchases',  icon: ClipboardList,   label: 'Purchases'  },
   { to: '/reports',    icon: BarChart2,       label: 'Reports'    },
 ];
 
