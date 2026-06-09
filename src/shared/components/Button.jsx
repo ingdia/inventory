@@ -1,5 +1,6 @@
 const variants = {
   primary: 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/30',
+  secondary: 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700',
   danger: 'bg-red-600/80 hover:bg-red-500 text-white',
   ghost: 'bg-slate-700/50 hover:bg-slate-700 text-slate-200 border border-slate-600',
   outline: 'border border-emerald-500 text-emerald-400 hover:bg-emerald-500/10',
