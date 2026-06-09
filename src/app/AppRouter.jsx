@@ -23,9 +23,17 @@ export default function AppRouter() {
       <Toaster
         position="top-right"
         toastOptions={{
-          style: { background: '#1e293b', color: '#f1f5f9', border: '1px solid #334155' },
-          success: { iconTheme: { primary: '#10b981', secondary: '#f1f5f9' } },
-          error: { iconTheme: { primary: '#ef4444', secondary: '#f1f5f9' } },
+          style: {
+            background: '#ffffff',
+            color: '#0f172a',
+            border: '1px solid #cffafe',
+            borderRadius: '16px',
+            boxShadow: '0 8px 30px rgba(6,182,212,0.12)',
+            fontSize: '14px',
+            fontWeight: '500',
+          },
+          success: { iconTheme: { primary: '#06b6d4', secondary: '#ffffff' } },
+          error: { iconTheme: { primary: '#ef4444', secondary: '#ffffff' } },
         }}
       />
       <Routes>
