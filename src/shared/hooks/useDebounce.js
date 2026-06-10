@@ -1,16 +1,16 @@
 // src/shared/hooks/useDebounce.js
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function useDebounce(value, delay = 300) {
+function useDebounce(value, delay = 300) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
     return () => clearTimeout(timer);
   }, [value, delay]);
 
   return debouncedValue;
 }
+
+export default useDebounce;
+export { useDebounce }; // supports named import too

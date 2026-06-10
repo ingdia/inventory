@@ -27,9 +27,13 @@ export default function ConfirmDialog({
             <AlertTriangle size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{title}</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+              {title}
+            </h3>
             {message && (
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{message}</p>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                {message}
+              </p>
             )}
           </div>
         </div>

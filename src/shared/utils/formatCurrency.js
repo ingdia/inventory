@@ -6,9 +6,13 @@ const formatter = new Intl.NumberFormat('rw-RW', {
 });
 
 export function formatCurrency(amount) {
-  if (amount == null || Number.isNaN(Number(amount))) {
-    return 'RWF 0';
-  }
+  if (amount == null || Number.isNaN(Number(amount))) return 'RWF 0';
+  return formatter.format(amount);
+}
 
+// Use this when you want a dash instead of "RWF 0" for empty/null values
+// e.g. in table cells where no value means truly empty
+export function formatCurrencyOrDash(amount) {
+  if (amount == null || Number.isNaN(Number(amount))) return '—';
   return formatter.format(amount);
 }

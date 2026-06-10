@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useCartStore from '../store/cartStore.js';
-import POSProductSearch from '../components/POSProductSearch.jsx';
+import POSProductSearch from '../components/POSMedicineSearch.jsx';
 import POSCart from '../components/POSCart.jsx';
 import ReceiptModal from '../components/ReceiptModal.jsx';
 

@@ -1,4 +1,5 @@
 export { default as POSPage } from './pages/POSPage.jsx';
+export { default as SalesPage } from './pages/SalesPage.jsx';
 export { default as SalesListPage } from './pages/SalesListPage.jsx';
 export { default as ReceiptModal } from './components/ReceiptModal.jsx';
 export { default as SaleDetailModal } from './components/SaleDetailModal.jsx';
