@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { User, Lock } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+import toast from 'react-hot-toast';
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
     rememberMe: false
   });
+  const navigate = useNavigate();
+  const { login, isLoading } = useAuthStore();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -17,8 +22,15 @@ const SignInPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      await login({ email: formData.email, password: formData.password });
+      toast.success('Welcome back! 👋');
+      navigate('/dashboard', { replace: true });
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Invalid credentials');
+    }
   };
 
   return (
@@ -49,12 +61,16 @@ const SignInPage = () => {
 
           {/* Text Content */}
           <div className="relative z-30 text-white max-w-[250px]">
-            <h1 className="text-4xl font-extrabold tracking-wider mb-2">WELCOME</h1>
-            <p className="text-blue-200 text-xs font-bold tracking-widest uppercase mb-6">
-              Your Headline Name
-            </p>
-            <p className="text-blue-100 text-[10px] leading-relaxed opacity-80">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </div>
+              <span className="text-xs font-bold tracking-widest uppercase text-blue-200">PharmaManager</span>
+            </div>
+            <h1 className="text-4xl font-extrabold tracking-wider mb-2">WELCOME
+BACK</h1>
+            <p className="text-blue-100 text-[11px] leading-relaxed opacity-80 mt-3">
+              Your all-in-one pharmacy management system. Manage medicines, inventory, and your team — all in one place.
             </p>
           </div>
         </div>
@@ -69,17 +85,17 @@ const SignInPage = () => {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Username Input */}
+              {/* Email Input */}
               <div className="relative group">
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                   <User size={16} />
                 </div>
                 <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
+                  type="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="User Name"
+                  placeholder="Email address"
                   className="w-full pl-10 pr-4 py-3 bg-[#f4f6f9] border border-transparent rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white transition-all"
                   required
                 />
@@ -128,9 +144,10 @@ const SignInPage = () => {
               {/* Sign In Button (Dark Navy) */}
               <button
                 type="submit"
-                className="w-full bg-[#1a3c6e] hover:bg-[#142e56] text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-sm mt-4"
+                className="w-full bg-[#1a3c6e] hover:bg-[#142e56] text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-sm mt-4 disabled:opacity-60"
+                disabled={isLoading}
               >
-                Sign in
+                {isLoading ? 'Signing in...' : 'Sign in'}
               </button>
 
               {/* Alternative Sign In (White with border) */}
@@ -144,9 +161,9 @@ const SignInPage = () => {
               {/* Sign Up Link */}
               <p className="text-center text-[11px] text-gray-500 mt-6">
                 Don't have an account?{' '}
-                <a href="#" className="text-[#2b78c2] hover:text-blue-800 font-bold transition-colors">
+                <Link to="/signup" className="text-[#2b78c2] hover:text-blue-800 font-bold transition-colors">
                   Sign up
-                </a>
+                </Link>
               </p>
             </form>
           </div>

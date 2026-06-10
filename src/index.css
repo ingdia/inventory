@@ -1,5 +1,44 @@
 @import "tailwindcss";
 
+@theme {
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-900: #7f1d1d;
+
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+
+  --color-teal-600: #0d9488;
+
+  --color-white: #ffffff;
+}
+
 :root {
   --brand: oklch(86.5% 0.127 207.078);
   --brand-deep: oklch(55% 0.18 207.078);
@@ -22,7 +61,6 @@ body {
 ::-webkit-scrollbar-track { background: #f1f5f9; }
 ::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 99px; }
 
-/* Utility classes using the oklch brand color */
 .bg-brand { background-color: var(--brand); }
 .bg-brand-deep { background-color: var(--brand-deep); }
 .bg-brand-soft { background-color: var(--brand-soft); }
@@ -31,7 +69,6 @@ body {
 .ring-brand { --tw-ring-color: var(--brand); }
 .shadow-brand { box-shadow: 0 8px 32px oklch(86.5% 0.127 207.078 / 0.35); }
 
-/* Auth page background image overlay */
 .auth-bg {
   position: relative;
   background-image: url('/src/assets/pharmacy-bg.jpg');

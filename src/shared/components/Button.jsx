@@ -3,6 +3,10 @@ const variants = {
     style: { background: 'linear-gradient(135deg,oklch(86.5% 0.127 207.078),oklch(55% 0.18 207.078))', boxShadow: '0 6px 20px oklch(55% 0.18 207.078 / 0.32)' },
     cls: 'text-white hover:opacity-90',
   },
+  secondary: {
+    style: {},
+    cls: 'bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200',
+  },
   danger: {
     style: { background: 'linear-gradient(135deg,#fb7185,#e11d48)', boxShadow: '0 6px 20px rgba(225,29,72,0.25)' },
     cls: 'text-white hover:opacity-90',

@@ -14,7 +14,7 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// Global response error handling
+// Handle errors globally
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

@@ -7,8 +7,14 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
 import LoginPage from '../features/auth/pages/LoginPage';
 import SignupPage from '../features/auth/pages/SignupPage';
+import SignupPage from '../features/auth/pages/SignupPage';
 import ProfilePage from '../features/auth/pages/ProfilePage';
 import UserManagementPage from '../features/auth/pages/UserManagementPage';
+import MedicinesPage from '../features/medicines/MedicinesPage';
+import InventoryPage from '../features/inventory/InventoryPage';
+import InventoryDashboard from '../features/inventory/InventoryDashboard';
+import DashboardPage from '../features/dashboard/DashboardPage';
+import { SalesReportPage, InventoryReportPage, ProfitLossPage, PurchasesReportPage } from '../features/reports';
 
 // Inventory/Medicines (Esther)
 import MedicinesPage from '../features/medicines/MedicinesPage';
@@ -54,6 +60,7 @@ export default function AppRouter() {
         {/* Guest only */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Route>
 
