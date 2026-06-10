@@ -13,12 +13,12 @@ export default function MetricCard({ icon: Icon, label, value, trend, color = 'c
   if (loading) return <Skeleton />;
 
   const colorMap = {
-    cyan:   { bg: 'bg-cyan-50',   icon: 'bg-cyan-500',   text: 'text-cyan-600'   },
-    green:  { bg: 'bg-green-50',  icon: 'bg-green-500',  text: 'text-green-600'  },
-    purple: { bg: 'bg-purple-50', icon: 'bg-purple-500', text: 'text-purple-600' },
-    amber:  { bg: 'bg-amber-50',  icon: 'bg-amber-500',  text: 'text-amber-600'  },
-    red:    { bg: 'bg-red-50',    icon: 'bg-red-500',    text: 'text-red-600'    },
-    blue:   { bg: 'bg-blue-50',   icon: 'bg-blue-500',   text: 'text-blue-600'   },
+    cyan:   { iconBg: 'oklch(94% 0.06 207.078)',  iconColor: 'oklch(45% 0.18 207.078)'  },
+    green:  { iconBg: '#dcfce7',                   iconColor: '#16a34a'                   },
+    purple: { iconBg: '#ede9fe',                   iconColor: '#7c3aed'                   },
+    amber:  { iconBg: '#fef3c7',                   iconColor: '#d97706'                   },
+    red:    { iconBg: '#fee2e2',                   iconColor: '#dc2626'                   },
+    blue:   { iconBg: '#dbeafe',                   iconColor: '#2563eb'                   },
   };
 
   const c = colorMap[color] || colorMap.cyan;
@@ -30,8 +30,8 @@ export default function MetricCard({ icon: Icon, label, value, trend, color = 'c
       className={`bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 ${onClick ? 'cursor-pointer' : ''}`}
     >
       <div className="flex items-center justify-between mb-3">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${c.icon}`}>
-          <Icon size={18} className="text-white" />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: c.iconBg }}>
+          <Icon size={18} style={{ color: c.iconColor }} />
         </div>
         {trend !== undefined && (
           <span className={`flex items-center gap-0.5 text-xs font-semibold ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
@@ -40,7 +40,7 @@ export default function MetricCard({ icon: Icon, label, value, trend, color = 'c
           </span>
         )}
       </div>
-      <p className="text-2xl font-extrabold text-slate-800 mb-0.5">
+      <p className="text-lg font-bold text-slate-800 mb-0.5">
         {isCurrency ? formatCurrency(value) : value?.toLocaleString() ?? '—'}
       </p>
       <p className="text-xs font-medium text-slate-400">{label}</p>
