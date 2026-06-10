@@ -88,11 +88,11 @@ export default function AppRouter() {
           </Route>
         </Route>
 
-        {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Root redirect — send / to login for unauthenticated, GuestRoute handles the rest */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
 
       </Routes>
     </BrowserRouter>
