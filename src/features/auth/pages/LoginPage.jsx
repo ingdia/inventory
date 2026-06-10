@@ -60,6 +60,7 @@ export default function LoginPage() {
           <div className="max-w-sm w-full mx-auto">
             <h2 className="text-2xl font-bold text-gray-900 mb-1">Sign in</h2>
             <p className="text-gray-400 text-[11px] mb-8">Enter your credentials to access your account</p>
+            <p className="text-gray-400 text-[11px] mb-8">Enter your credentials to access your account</p>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Email */}
@@ -124,7 +125,9 @@ export default function LoginPage() {
           </div>
         </div>
 
+
       </div>
     </div>
   );
 }
+
