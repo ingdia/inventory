@@ -50,6 +50,8 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
+        // Only redirect to login if we have a real token that expired
+        
         localStorage.removeItem('token');
         window.location.href = '/login';
         return Promise.reject(refreshError);

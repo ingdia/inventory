@@ -3,5 +3,9 @@ import useAuthStore from '../../features/auth/store/authStore';
 
 export default function GuestRoute() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isInitialized   = useAuthStore((s) => s.isInitialized);
+
+  if (!isInitialized) return null;
+
   return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Outlet />;
 }

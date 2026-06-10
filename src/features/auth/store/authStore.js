@@ -4,8 +4,9 @@ import toast from 'react-hot-toast';
 
 const useAuthStore = create((set) => ({
   user: null,
-  token: null,
-  isAuthenticated: false,
+  token: localStorage.getItem('token') || null,
+  isAuthenticated: !!localStorage.getItem('token'),
+  isInitialized: false,
   isLoading: false,
 
   login: async (credentials) => {

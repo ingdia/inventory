@@ -23,7 +23,10 @@ const useDashboardStore = create((set, get) => ({
   setPeriod: (period) => set({ period }),
 
   setLoading: (key, val) =>
-    set((s) => ({ loading: { ...s.loading, [key]: val } })),
+    set((s) => {
+      if (s.loading[key] === val) return s;
+      return { loading: { ...s.loading, [key]: val } };
+    }),
 
   fetchDashboardData: async () => {
     const { dateRange, period, setLoading } = get();
