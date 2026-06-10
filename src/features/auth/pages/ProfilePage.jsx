@@ -36,7 +36,7 @@ export default function ProfilePage() {
 
   const pf = useForm({
     resolver: zodResolver(updateProfileSchema),
-    defaultValues: { firstName: user?.firstName, lastName: user?.lastName, phone: user?.phone || '' },
+    defaultValues: { name: user?.name || '', phone: user?.phone || '' },
   });
   const pwf = useForm({ resolver: zodResolver(updatePasswordSchema) });
 
@@ -53,7 +53,7 @@ export default function ProfilePage() {
     } catch (err) { toast.error(err.response?.data?.message || 'Failed.'); }
   };
 
-  const initials = user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : 'U';
+  const initials = user?.name ? user.name.slice(0, 2).toUpperCase() : 'U';
 
   return (
     <div className="min-h-screen p-6 pb-16" style={{ background: 'oklch(97% 0.02 207.078)' }}>
@@ -88,11 +88,11 @@ export default function ProfilePage() {
             {/* info */}
             <div className="pt-12 flex-1 min-w-0">
               <p className="text-xl font-black text-slate-800 truncate leading-tight">
-                {user?.firstName} {user?.lastName}
+                {user?.name}
               </p>
               <p className="text-slate-400 text-sm truncate mt-0.5">{user?.email}</p>
               <div className="flex gap-2 mt-2.5">
-                <Badge variant={user?.role === 'owner' ? 'warning' : 'info'}>
+                <Badge variant={user?.role === 'Owner' ? 'warning' : 'info'}>
                   <Shield size={10} /> {user?.role}
                 </Badge>
                 <Badge variant={user?.isActive ? 'success' : 'danger'}>
@@ -107,12 +107,8 @@ export default function ProfilePage() {
         <div className="bg-white p-7" style={card}>
           <SectionHead icon={User} title="Personal Info" />
           <form onSubmit={pf.handleSubmit(onProfile)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Input label="First Name" placeholder="Jane" icon={User}
-                error={pf.formState.errors.firstName?.message} {...pf.register('firstName')} />
-              <Input label="Last Name" placeholder="Doe" icon={User}
-                error={pf.formState.errors.lastName?.message} {...pf.register('lastName')} />
-            </div>
+            <Input label="Full Name" placeholder="Jane Doe" icon={User}
+              error={pf.formState.errors.name?.message} {...pf.register('name')} />
             <Input label="Phone" placeholder="+250 788 000 000" icon={Phone}
               error={pf.formState.errors.phone?.message} {...pf.register('phone')} />
             <div className="flex justify-end pt-2">

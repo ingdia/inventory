@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import useAuthStore from '../features/auth/store/authStore';
 import GuestRoute from './routes/GuestRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
@@ -23,6 +25,12 @@ const Placeholder = ({ title }) => (
 );
 
 export default function AppRouter() {
+  const { fetchProfile } = useAuthStore();
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) fetchProfile();
+  }, []);
+
   return (
     <BrowserRouter>
       <Toaster
@@ -61,7 +69,7 @@ export default function AppRouter() {
             <Route path="/reports/profit-loss" element={<ProfitLossPage />} />
             <Route path="/reports/purchases" element={<PurchasesReportPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['Owner']} />}>
               <Route path="/users" element={<UserManagementPage />} />
             </Route>
           </Route>
