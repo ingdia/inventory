@@ -67,7 +67,7 @@ export default function AppLayout() {
     navigate('/login');
   };
 
-  const initials = user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : 'U';
+  const initials = user?.name ? user.name.slice(0, 2).toUpperCase() : 'U';
 
   const Sidebar = () => (
     <div className="flex flex-col h-full bg-white" style={{ borderRight: '1px solid oklch(93% 0.03 207.078)' }}>
@@ -88,7 +88,7 @@ export default function AppLayout() {
         <p className="px-3.5 text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Reports</p>
         {reportItems.map((item) => <NavItem key={item.to} {...item} />)}
 
-        {user?.role === 'owner' && (
+        {user?.role === 'Owner' && (
           <>
             <div className="mx-2 my-3 h-px" style={{ background: 'oklch(93% 0.03 207.078)' }} />
             <NavLink to="/users"
@@ -117,12 +117,12 @@ export default function AppLayout() {
           style={{ background: BL, border: `1.5px solid oklch(86.5% 0.127 207.078 / 0.3)` }}>
           <NavLink to="/profile" className="flex items-center gap-3 rounded-xl p-1 hover:opacity-75 transition-opacity">
             <div className="w-8 h-8 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
-              style={{ background: getGrad(user?.firstName), boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+              style={{ background: getGrad(user?.name), boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
               {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-slate-700 text-xs truncate leading-tight">{user?.firstName} {user?.lastName}</p>
-              <Badge variant={user?.role === 'owner' ? 'warning' : 'info'}>{user?.role}</Badge>
+              <p className="font-bold text-slate-700 text-xs truncate leading-tight">{user?.name}</p>
+              <Badge variant={user?.role === 'Owner' ? 'warning' : 'info'}>{user?.role}</Badge>
             </div>
             <User size={12} className="text-slate-300 flex-shrink-0" />
           </NavLink>
