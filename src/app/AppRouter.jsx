@@ -23,7 +23,7 @@ export default function AppRouter() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) fetchProfile();
-  }, []);
+  }, [fetchProfile]);
 
   return (
     <BrowserRouter>
@@ -48,7 +48,6 @@ export default function AppRouter() {
         {/* Guest only */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Route>
 
