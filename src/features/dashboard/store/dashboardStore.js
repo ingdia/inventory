@@ -30,8 +30,6 @@ const useDashboardStore = create((set, get) => ({
 
   fetchDashboardData: async () => {
     const { dateRange, period, setLoading } = get();
-    const params = { ...dateRange, period };
-
     const calls = [
       { key: 'metrics',       fn: () => dashboardService.getMetrics(dateRange),        setter: (d) => set({ metrics: d }) },
       { key: 'revenueChart',  fn: () => dashboardService.getRevenueChart({ period }),  setter: (d) => set({ revenueChart: d }) },
@@ -50,8 +48,8 @@ const useDashboardStore = create((set, get) => ({
         try {
           const { data } = await fn();
           setter(data.data);
-        } catch {
-          // silent — widgets show empty state
+        } catch (e) {
+          console.error('[dashboard]', key, e?.response?.data || e.message);
         } finally {
           setLoading(key, false);
         }
