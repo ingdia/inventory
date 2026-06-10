@@ -7,7 +7,6 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
 import LoginPage from '../features/auth/pages/LoginPage';
 import SignupPage from '../features/auth/pages/SignupPage';
-import SignupPage from '../features/auth/pages/SignupPage';
 import ProfilePage from '../features/auth/pages/ProfilePage';
 import UserManagementPage from '../features/auth/pages/UserManagementPage';
 import MedicinesPage from '../features/medicines/MedicinesPage';
@@ -16,23 +15,6 @@ import InventoryDashboard from '../features/inventory/InventoryDashboard';
 import DashboardPage from '../features/dashboard/DashboardPage';
 import { SalesReportPage, InventoryReportPage, ProfitLossPage, PurchasesReportPage } from '../features/reports';
 
-// Inventory/Medicines (Esther)
-import MedicinesPage from '../features/medicines/MedicinesPage';
-import InventoryPage from '../features/inventory/InventoryPage';
-import InventoryDashboard from '../features/inventory/InventoryDashboard';
-
-// Dashboard (Chantal)
-import DashboardPage from '../features/dashboard/DashboardPage';
-
-// Reports (Chantal)
-import {
-  SalesReportPage,
-  InventoryReportPage,
-  ProfitLossPage,
-  PurchasesReportPage,
-} from '../features/reports';
-
-// Sales & Purchases (Kelia — you)
 import { POSPage, SalesListPage } from '../features/sales';
 import { PurchasesListPage, AddPurchasePage } from '../features/purchases';
 
