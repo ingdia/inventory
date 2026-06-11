@@ -1,5 +1,5 @@
 // src/features/sales/services/sales.service.js
-import axiosInstance from '../../../shared/services/axiosInstance.js';
+import axiosInstance from '../../../shared/services/api.js';
 
 function stripEmptyParams(params = {}) {
   return Object.fromEntries(

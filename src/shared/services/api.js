@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   withCredentials: true,
 });
 
 // Attach token to every request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -27,6 +27,11 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+      const url = originalRequest.url || '';
+      if (url.includes('/auth/login') || url.includes('/auth/refresh')) {
+        return Promise.reject(error);
+      }
+
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -43,21 +48,15 @@ api.interceptors.response.use(
 
       try {
         const { data } = await api.post('/auth/refresh');
-        const newToken = data.token;
-        localStorage.setItem('token', newToken);
+        const newToken = data.data?.accessToken || data.accessToken;
+        localStorage.setItem('accessToken', newToken);
         processQueue(null, newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        // Only redirect to login if we have a real token that expired
-        // Do not redirect during development with mock token
-        const hasRealToken = localStorage.getItem('accessToken') && 
-          localStorage.getItem('accessToken') !== 'mock-token';
-        if (hasRealToken) {
-          localStorage.removeItem('accessToken');
-          window.location.href = '/login';
-        }
+        localStorage.removeItem('accessToken');
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

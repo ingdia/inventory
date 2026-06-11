@@ -1,4 +1,4 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User, Lock } from 'lucide-react';
@@ -110,13 +110,6 @@ export default function LoginPage() {
               </button>
 
             </form>
-
-            <p className="text-center text-[11px] text-gray-500 mt-6">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-[#2b78c2] hover:text-blue-800 font-bold transition-colors">
-                Create account
-              </Link>
-            </p>
 
           </div>
         </div>

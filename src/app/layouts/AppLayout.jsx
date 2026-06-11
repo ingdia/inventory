@@ -75,9 +75,9 @@ export default function AppLayout() {
     navigate('/login');
   };
 
-  const initials = user
+  const initials = user?.firstName && user?.lastName
     ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
-    : 'U';
+    : '?';
 
   const Sidebar = () => (
     <div
@@ -121,7 +121,7 @@ export default function AppLayout() {
           <NavItem key={item.to} {...item} />
         ))}
 
-        {user?.role === 'Owner' && (
+        {user?.role === 'owner' && (
           <>
             <div
               className="mx-2 my-3 h-px"

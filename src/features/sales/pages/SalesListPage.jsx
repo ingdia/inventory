@@ -187,7 +187,7 @@ export default function SalesListPage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
           <SearchBar
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={(v) => setSearchInput(v)}
             placeholder="Search receipt or customer..."
             className="w-full sm:w-64"
           />

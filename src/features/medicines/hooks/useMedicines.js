@@ -9,8 +9,8 @@ export function useMedicines() {
 
   useEffect(() => {
     store.fetchMedicines();
-    medicinesService.getCategories().then(({ data }) => setCategories(data.data || [])).catch(() => {});
-    medicinesService.getSuppliers().then(({ data }) => setSuppliers(data.data || [])).catch(() => {});
+    medicinesService.getCategories().then(({ data }) => setCategories(Array.isArray(data.data) ? data.data : data.data?.categories || [])).catch(() => {});
+    medicinesService.getSuppliers().then(({ data }) => setSuppliers(Array.isArray(data.data) ? data.data : data.data?.suppliers || [])).catch(() => {});
   }, []);
 
   const handleFilterChange = (key, value) => {

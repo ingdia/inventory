@@ -6,7 +6,6 @@ import GuestRoute from './routes/GuestRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
 import LoginPage from '../features/auth/pages/LoginPage';
-import SignupPage from '../features/auth/pages/SignupPage';
 import ProfilePage from '../features/auth/pages/ProfilePage';
 import UserManagementPage from '../features/auth/pages/UserManagementPage';
 import MedicinesPage from '../features/medicines/MedicinesPage';
@@ -22,7 +21,7 @@ export default function AppRouter() {
   const { fetchProfile } = useAuthStore();
 
   useEffect(() => {
-    if (localStorage.getItem('token')) fetchProfile();
+    if (localStorage.getItem('accessToken')) fetchProfile();
   }, [fetchProfile]);
 
   return (
@@ -48,7 +47,6 @@ export default function AppRouter() {
         {/* Guest only */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
         </Route>
 
         {/* Protected — all authenticated users */}
