@@ -9,7 +9,7 @@ import { useCreatePurchase } from '../hooks/usePurchases.js';
 import { buildPurchasePayload } from '../utils/purchases.utils.js';
 import SupplierSelect from '../components/SupplierSelect.jsx';
 import useDebounce from '../../../shared/hooks/useDebounce.js';
-import axiosInstance from '../../../shared/services/axiosInstance.js';
+import axiosInstance from '../../../shared/services/api.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { formatDateForInput } from '../../../shared/utils/formatDate.js';
 import Button from '../../../shared/components/Button.jsx';

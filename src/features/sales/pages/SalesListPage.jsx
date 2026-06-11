@@ -114,8 +114,8 @@ export default function SalesListPage() {
   const { data, isLoading } = useSalesList(queryFilters);
   const { data: summaryData, isLoading: summaryLoading } = useTodaySummary();
 
-  const sales = data?.data ?? [];
-  const pagination = data?.pagination ?? { total: 0, page: 1, limit: 20, totalPages: 1 };
+  const sales = Array.isArray(data?.data) ? data.data : data?.data?.sales ?? [];
+  const pagination = data?.data?.pagination ?? data?.pagination ?? { total: 0, page: 1, limit: 20, totalPages: 1 };
   const summary = summaryData?.data ?? {};
 
   const hasActiveFilters = Boolean(

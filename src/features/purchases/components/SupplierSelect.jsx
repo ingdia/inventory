@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from '../../../shared/services/axiosInstance.js';
+import axiosInstance from '../../../shared/services/api.js';
 import Spinner from '../../../shared/components/Spinner.jsx';
 
 const selectClassName =

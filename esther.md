@@ -97,8 +97,7 @@ src/
     │   ├── usePagination.js
     │   └── useTheme.js
     ├── services/
-    │   ├── api.js                     ← main axios instance (token + refresh)
-    │   └── axiosInstance.js           ← secondary axios (created during integration test)
+    │   └── api.js                     ← main axios instance (token + refresh)
     └── utils/
         ├── formatDate.js
         └── formatCurrency.js
@@ -132,11 +131,8 @@ VITE_API_URL=http://localhost:5000/api   ← in .env file
 - On **refresh failure**: clears token, redirects to `/login`
 - Uses `withCredentials: true` (sends cookies)
 
-### Secondary Instance — `src/shared/services/axiosInstance.js`
-- Created during integration testing
-- Also reads `token` from localStorage
-- On 401: clears localStorage, redirects to /login
-- **Not used by any real code** — can be deleted or kept
+### Secondary Instance
+- `axiosInstance.js` was deleted — all services now use `api.js`
 
 ---
 
@@ -154,32 +150,160 @@ SUPPLIERS:         '/suppliers'
 
 ---
 
-## AUTH FLOW
+## AUTH FLOW — LOGIN & SIGNUP BY ROLE
+
+---
+
+### THERE IS NO PUBLIC SIGNUP
+
+This system has **no self-registration page**. Users cannot sign up themselves.
+Only an **Owner** can create new accounts via the User Management page (`/users`).
+
+---
+
+### HOW A NEW USER IS CREATED (Owner only)
 
 ```
-User visits /dashboard
+Owner logs in → goes to /users → clicks "Add User"
     ↓
-ProtectedRoute checks isAuthenticated (Zustand)
-    ↓ not authenticated
-Redirect to /login
+Fills in: Full Name, Email, Password, Role (owner | pharmacist), Phone
     ↓
-LoginPage submits { email, password } to POST /auth/login
+POST /api/users
+{
+  name: "Jane Doe",
+  email: "jane@pharmacy.com",
+  password: "password123",
+  role: "pharmacist"   ← or "owner"
+  phone: "+250 788 000 000"  ← optional
+}
     ↓
-Backend returns { token, user }
+Backend creates the user account
     ↓
-authStore saves token to localStorage + sets isAuthenticated: true
-    ↓
-navigate('/dashboard')
+New user can now log in at /login with their email + password
 ```
+
+**Role options when creating:**
+| Role | Value sent to API | Access level |
+|---|---|---|
+| Pharmacist | `"pharmacist"` | All pages except /users |
+| Owner | `"owner"` | All pages including /users |
+
+---
+
+### LOGIN FLOW (same for both roles)
+
+```
+User visits any protected route (e.g. /dashboard)
+    ↓
+ProtectedRoute checks isAuthenticated (Zustand store)
+    ↓ not authenticated
+Redirected to /login
+    ↓
+User fills email + password → form validated by Zod (loginSchema)
+    ↓
+POST /api/auth/login  →  { email, password }
+    ↓
+Backend returns:
+{
+  data: {
+    accessToken: "eyJ...",
+    user: { _id, name, email, role, isActive, ... }
+  }
+}
+    ↓
+authStore.login() saves:
+  - accessToken → localStorage (key: "accessToken")
+  - user object → Zustand state
+  - isAuthenticated: true
+    ↓
+navigate('/dashboard')  ← both roles land here
+```
+
+---
+
+### AFTER LOGIN — ROLE-BASED ACCESS
+
+```
+ProtectedRoute (no allowedRoles) — both owner and pharmacist can access:
+  /dashboard, /medicines, /inventory, /inventory/dashboard
+  /pos, /sales, /purchases, /purchases/new
+  /reports/sales, /reports/inventory, /reports/profit-loss, /reports/purchases
+  /profile
+
+ProtectedRoute (allowedRoles: ["owner"]) — owner only:
+  /users  ← UserManagementPage
+        ↓ if pharmacist tries to visit /users
+  Redirected to /dashboard
+```
+
+---
+
+### SESSION REHYDRATION (page refresh)
+
+```
+User refreshes browser
+    ↓
+AppRouter mounts → useEffect runs:
+  if (localStorage.getItem('accessToken')) fetchProfile()
+    ↓
+GET /api/auth/me  →  returns current user object
+    ↓
+authStore sets: user, isAuthenticated: true
+    ↓
+User stays logged in, no redirect to /login
+
+If token is invalid/expired:
+    ↓
+fetchProfile catches the error
+    ↓
+Clears localStorage + sets isAuthenticated: false
+    ↓
+Redirected to /login
+```
+
+---
+
+### LOGOUT
+
+```
+User clicks logout
+    ↓
+POST /api/auth/logout  (fire and forget — errors ignored)
+    ↓
+localStorage.removeItem('accessToken')
+    ↓
+Zustand: user = null, isAuthenticated = false
+    ↓
+GuestRoute redirects to /login
+```
+
+---
+
+### TOKEN REFRESH (auto, on 401)
+
+```
+Any API call returns 401 Unauthorized
+    ↓
+api.js interceptor catches it
+    ↓
+POST /api/auth/refresh  (using raw axios, NOT api — prevents recursive loop)
+    ↓
+Backend returns new accessToken
+    ↓
+Saved to localStorage + all queued failed requests are retried
+
+If refresh also fails:
+    ↓
+Clear localStorage → redirect to /login
+```
+
+---
 
 ### Token Storage
-- Key: `token` (in localStorage)
+- Key: `accessToken` in localStorage
 - All requests: `Authorization: Bearer <token>`
-- Refresh endpoint: `POST /auth/refresh`
-
-### Profile
-- Fetched from: `GET /profile`
-- Returns user object directly (not nested in `data.data`)
+- Refresh endpoint: `POST /api/auth/refresh`
+- Profile endpoint: `GET /api/auth/me`
 
 ---
 
@@ -391,4 +515,4 @@ npm run build
 
 ---
 
-*Last updated during current session. Branch: `feature/authentication`*
+*Last updated: integration-test branch*

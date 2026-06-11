@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { Plus, Trash2 } from 'lucide-react';
 import useDebounce from '../../../shared/hooks/useDebounce.js';
-import axiosInstance from '../../../shared/services/axiosInstance.js';
+import axiosInstance from '../../../shared/services/api.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import Spinner from '../../../shared/components/Spinner.jsx';
 
