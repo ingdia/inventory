@@ -111,9 +111,10 @@ src/
 | Branch | Purpose | Status |
 |---|---|---|
 | `main` | Production-ready merged code | ✅ Stable |
-| `feature/inventory-management` | Your main feature work | ✅ Merged to main |
-| `feature/api-integration` | axios + vite alias work | ✅ Pushed, not merged |
-| `feature/authentication` | Login/auth API alignment | ✅ Pushed, not merged |
+| `integration-test` | Active integration work | ✅ Current branch |
+| `feature/inventory-management` | Inventory feature work | ✅ Merged to main |
+| `feature/api-integration` | axios + vite alias work | ✅ Pushed |
+| `feature/authentication` | Login/auth API alignment | ✅ Merged into integration-test |
 
 ---
 
@@ -306,45 +307,17 @@ POST /users
 ### 1. ❌ /api/suppliers returns 404
 - `GET /api/suppliers` is called by `useMedicines` on load
 - **Backend does not have this route built yet**
+- Frontend silently fails (`.catch(() => {})`) — app doesn't crash, supplier dropdown is empty
 - Fix: Backend team needs to create `GET /api/suppliers`
-- Currently: silently fails (`.catch(() => {})`) so app doesn't crash, but supplier dropdown is empty
 
-### 2. ❌ /api/categories likely also missing
+### 2. ❌ /api/categories returns 404
 - Same situation as suppliers
-- `GET /api/categories` called on MedicinesPage load
-- Backend needs to build this too
-
-### 3. ⚠️ Axios refresh loop (FIXED in feature/authentication)
-- Old bug: refresh token was called multiple times simultaneously
-- Fix applied: use raw `axios` (not `api`) for the refresh call, update `api.defaults.headers.common.Authorization` after refresh so all future requests use new token automatically
-- **This fix is on `feature/authentication` branch — needs to be merged to main**
-
-### 4. ⚠️ axiosInstance.js is redundant
-- `src/shared/services/axiosInstance.js` was created during testing
-- It's not imported by any real feature file
-- Can safely be deleted or ignored
-
-### 5. ⚠️ ProfilePage uses firstName/lastName
-- `ProfilePage.jsx` still renders `user.firstName` and `user.lastName`
-- But backend `POST /users` now uses `name` (single field)
-- If backend consistently returns `name` only, ProfilePage will show blank name
-- **Needs to be checked against backend `/profile` response shape**
-
-### 6. ⚠️ authStore mock data removed but fetchMe not called on app load
-- Old code had `isAuthenticated: true` hardcoded (mock)
-- Now it's `false` by default
-- `fetchMe()` is never called on app startup to rehydrate session from token in localStorage
-- **If user refreshes the page, they get logged out even with a valid token**
-- Fix needed: call `fetchMe()` on app mount if token exists in localStorage
-
-### 7. ⚠️ formatCurrency uses USD
-- `formatCurrency` formats as `$` (USD)
-- If your pharmacy is in Rwanda/Africa, should be RWF
-- Easy fix in `src/shared/utils/formatCurrency.js`
+- Frontend silently fails — category dropdown is empty
+- Fix: Backend team needs to create `GET /api/categories`
 
 ---
 
-## WHAT NEEDS TO BE BUILT ON BACKEND (Mentioned in logs)
+## WHAT NEEDS TO BE BUILT ON BACKEND
 
 | Endpoint | Used by | Priority |
 |---|---|---|
@@ -361,16 +334,22 @@ POST /users
 - Login page (email + password, toast errors, branded UI)
 - Protected routes (redirect to /login if not authenticated)
 - Guest routes (redirect to /dashboard if already logged in)
+- Session rehydration on page refresh (fetchProfile called on app mount)
 - MedicinesPage layout (table, filters, modals, pagination, CSV export)
 - InventoryPage layout (table, search, filter, pagination)
 - InventoryDashboard layout (cards, chart, alert tables)
 - StockMovementForm (stock in/out/adjustment with validation)
 - AlertDrawer in navbar (bell icon, side drawer, low stock + expiry)
-- ProfilePage (edit name/phone, change password)
+- ProfilePage (edit name/phone, change password — uses `name` single field)
 - UserManagementPage (table, add/edit/delete, activate/deactivate)
 - All shared components (Button, Input, Modal, Table, Badge, Pagination, etc.)
-- Axios interceptor with token refresh queue (fixed)
+- Axios interceptor with token refresh queue (raw axios used for refresh — no loop)
 - ThemeToggle (light/dark)
+- formatCurrency (RWF)
+- QueryClientProvider (react-query works app-wide)
+- POS page (medicine search, cart, checkout, receipt)
+- Sales list page (table, filters, summary cards, export CSV)
+- axiosInstance.js removed — all services use main api.js
 
 ---
 
@@ -390,14 +369,10 @@ POST /users
 
 ---
 
-## QUICK FIX CHECKLIST (Priority Order)
+## QUICK FIX CHECKLIST
 
-1. **Merge `feature/authentication` to main** — contains axios fix + login alignment
-2. **Add `fetchMe()` on app startup** — so page refresh doesn't log user out
-3. **Ask backend team for `GET /api/suppliers` and `GET /api/categories`**
-4. **Check ProfilePage against backend `/profile` response** — name vs firstName/lastName
-5. **Change currency to RWF** if needed in `formatCurrency.js`
-6. **Delete or keep `axiosInstance.js`** — it's unused
+1. **Ask backend team for `GET /api/suppliers` and `GET /api/categories`** — dropdowns are empty without them
+2. **Ask backend team for `GET /api/medicines/low-stock`, `/expiring`, `/inventory/summary`** — dashboard cards show empty
 
 ---
 
