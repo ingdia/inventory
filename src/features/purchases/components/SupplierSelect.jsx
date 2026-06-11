@@ -25,7 +25,8 @@ export default function SupplierSelect({
       try {
         const { data } = await axiosInstance.get('/suppliers', { params: { limit: 100 } });
         if (!cancelled) {
-          setSuppliers(data?.data ?? []);
+          const raw = data?.data;
+          setSuppliers(Array.isArray(raw) ? raw : raw?.suppliers ?? []);
         }
       } catch {
         if (!cancelled) {

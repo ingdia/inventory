@@ -137,7 +137,7 @@ export default function PurchasesListPage() {
   const receiveMutation = useReceivePurchase();
   const cancelMutation = useCancelPurchase();
 
-  const purchases = data?.data ?? [];
+  const purchases = Array.isArray(data?.data) ? data.data : data?.data?.purchases ?? [];
   const pagination = data?.pagination ?? { total: 0, page: 1, limit: 20, totalPages: 1 };
   const monthPurchases = monthData?.data ?? [];
 
