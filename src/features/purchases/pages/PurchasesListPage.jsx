@@ -139,7 +139,7 @@ export default function PurchasesListPage() {
 
   const purchases = Array.isArray(data?.data) ? data.data : data?.data?.purchases ?? [];
   const pagination = data?.pagination ?? { total: 0, page: 1, limit: 20, totalPages: 1 };
-  const monthPurchases = monthData?.data ?? [];
+  const monthPurchases = Array.isArray(monthData?.data) ? monthData.data : monthData?.data?.purchases ?? [];
 
   const monthTotal = monthPurchases.reduce((sum, p) => sum + (p.totalAmount || 0), 0);
   const pendingCount = monthPurchases.filter((p) => p.status === 'pending').length;
