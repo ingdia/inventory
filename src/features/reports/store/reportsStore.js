@@ -15,16 +15,29 @@ const useReportsStore = create((set) => ({
     set({ loading: true });
     try {
       const serviceMap = {
-        sales:     reportsService.getSalesReport,
-        inventory: reportsService.getInventoryReport,
-        profitLoss:reportsService.getProfitLoss,
-        purchases: reportsService.getPurchasesReport,
+        sales:      reportsService.getSalesReport,
+        inventory:  reportsService.getInventoryReport,
+        profitLoss: reportsService.getProfitLoss,
+        purchases:  reportsService.getPurchasesReport,
       };
-      const { data } = await serviceMap[type](params);
       const keyMap = { sales: 'salesReport', inventory: 'inventoryReport', profitLoss: 'profitLoss', purchases: 'purchasesReport' };
-      set({ [keyMap[type]]: { data: data.data, summary: data.summary, pagination: data.data?.pagination } });
-    } catch {
-      // silent
+      const { data: res } = await serviceMap[type](params);
+      // sales & purchases: res.data = { sales/purchases: [], pagination: {} }
+      // inventory & profitLoss: res.data = []
+      let list = [];
+      let pagination = null;
+      if (Array.isArray(res.data)) {
+        list = res.data;
+      } else if (res.data?.sales) {
+        list = res.data.sales;
+        pagination = res.data.pagination;
+      } else if (res.data?.purchases) {
+        list = res.data.purchases;
+        pagination = res.data.pagination;
+      }
+      set({ [keyMap[type]]: { data: list, summary: res.summary || null, pagination } });
+    } catch (e) {
+      console.error('[reportsStore]', type, e);
     } finally {
       set({ loading: false });
     }

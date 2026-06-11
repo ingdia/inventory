@@ -16,7 +16,7 @@ import ConfirmDialog from '../../../shared/components/ConfirmDialog';
 const BRAND = 'oklch(55% 0.18 207.078)';
 const BRAND_LIGHT = 'oklch(96% 0.04 207.078)';
 const BRAND_MID = 'oklch(86.5% 0.127 207.078)';
-const roleVariant = { Owner: 'warning', Pharmacist: 'info' };
+const roleVariant = { owner: 'warning', pharmacist: 'info' };
 
 const gradients = [
   'linear-gradient(135deg, oklch(70% 0.18 207.078), oklch(50% 0.18 207.078))',
@@ -41,7 +41,7 @@ function UserModal({ user, onClose, onSaved }) {
     resolver: zodResolver(schema),
     defaultValues: isEdit
       ? { name: user.name, phone: user.phone || '' }
-      : { role: 'Pharmacist' },
+      : { role: 'pharmacist' },
   });
 
   const onSubmit = async (data) => {
@@ -83,6 +83,10 @@ function UserModal({ user, onClose, onSaved }) {
           <Input label="Full Name" placeholder="Jane Doe" icon={UserCircle} error={errors.name?.message} {...register('name')} />
           {!isEdit && (
             <>
+              <div className="flex gap-3">
+                <Input label="First Name" placeholder="Jane" icon={UserCircle} error={errors.firstName?.message} {...register('firstName')} />
+                <Input label="Last Name" placeholder="Smith" icon={UserCircle} error={errors.lastName?.message} {...register('lastName')} />
+              </div>
               <Input label="Email" type="email" placeholder="jane@pharmacy.com" icon={Mail} error={errors.email?.message} {...register('email')} />
               <Input label="Password" type="password" placeholder="Min 8 characters" icon={Shield} error={errors.password?.message} {...register('password')} />
               <div className="flex flex-col gap-1.5">
@@ -91,8 +95,8 @@ function UserModal({ user, onClose, onSaved }) {
                   className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition-all hover:border-slate-300"
                   onFocus={(e) => { e.target.style.borderColor = BRAND; e.target.style.boxShadow = `0 0 0 4px oklch(86.5% 0.127 207.078 / 0.25)`; }}
                   onBlur={(e) => { e.target.style.borderColor = ''; e.target.style.boxShadow = ''; }}>
-                  <option value="Pharmacist">Pharmacist</option>
-                  <option value="Owner">Owner</option>
+                  <option value="pharmacist">Pharmacist</option>
+                  <option value="owner">Owner</option>
                 </select>
                 {errors.role && <p className="text-xs text-red-500 font-medium">{errors.role.message}</p>}
               </div>
@@ -189,7 +193,7 @@ export default function UserManagementPage() {
           {[
             { label: 'Total', value: pagination.total, bg: `linear-gradient(135deg, ${BRAND_MID}, ${BRAND})` },
             { label: 'Active', value: users.filter(u => u.isActive).length, bg: 'linear-gradient(135deg, #34d399, #059669)' },
-            { label: 'Owners', value: users.filter(u => u.role === 'Owner').length, bg: 'linear-gradient(135deg, #fbbf24, #d97706)' },
+            { label: 'Owners', value: users.filter(u => u.role === 'owner').length, bg: 'linear-gradient(135deg, #fbbf24, #d97706)' },
           ].map((s) => (
             <div key={s.label} className="bg-white rounded-2xl p-3 flex items-center gap-3 border" style={{ borderColor: 'oklch(86.5% 0.127 207.078 / 0.3)', boxShadow: '0 4px 16px oklch(55% 0.18 207.078 / 0.06)' }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold text-white flex-shrink-0" style={{ background: s.bg }}>
@@ -217,8 +221,8 @@ export default function UserManagementPage() {
             onFocus={(e) => { e.target.style.borderColor = BRAND; e.target.style.boxShadow = '0 0 0 4px oklch(86.5% 0.127 207.078 / 0.25)'; }}
             onBlur={(e) => { e.target.style.borderColor = ''; e.target.style.boxShadow = ''; }}>
             <option value="">All Roles</option>
-            <option value="Owner">Owner</option>
-            <option value="Pharmacist">Pharmacist</option>
+            <option value="owner">Owner</option>
+            <option value="pharmacist">Pharmacist</option>
           </select>
         </div>
 

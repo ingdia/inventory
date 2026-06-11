@@ -1,6 +1,18 @@
-export default function Spinner({ size = 'md', className = '' }) {
-  const sizes = { sm: 'h-4 w-4', md: 'h-8 w-8', lg: 'h-12 w-12' };
-  return (
-    <div className={`${sizes[size]} animate-spin rounded-full border-2 border-slate-700 border-t-emerald-400 ${className}`} />
-  );
-}
+const sizes = {
+  sm: 'h-4 w-4',
+  md: 'h-6 w-6',
+  lg: 'h-8 w-8',
+};
+
+const Spinner = ({ size = 'md', className = '' }) => (
+  <span
+    className={`inline-block animate-spin rounded-full border-2
+      border-cyan-200 border-t-cyan-600
+      dark:border-gray-600 dark:border-t-cyan-400
+      ${sizes[size] || sizes.md} ${className}`}
+    role="status"
+    aria-label="Loading"
+  />
+);
+
+export default Spinner;

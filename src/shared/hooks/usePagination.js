@@ -1,8 +1,21 @@
+// src/shared/hooks/usePagination.js
 import { useState } from 'react';
 
-export function usePagination(initialPage = 1, initialLimit = 10) {
-  const [page, setPage] = useState(initialPage);
-  const [limit] = useState(initialLimit);
-  const reset = () => setPage(1);
-  return { page, limit, setPage, reset };
+function usePagination(initialPage = 1, initialLimit = 20) {
+  const [page, setPage]   = useState(initialPage);
+  const [limit, setLimit] = useState(initialLimit);
+
+  const resetPage = () => setPage(1);
+
+  return {
+    page,
+    limit,
+    setPage,
+    setLimit,
+    resetPage,       // your branch uses this
+    reset: resetPage // main's branch uses this — alias, same function
+  };
 }
+
+export default usePagination;
+export { usePagination }; // supports named import too
