@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+
+// Auth (Diane)
 import GuestRoute from './routes/GuestRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
@@ -13,14 +15,8 @@ import InventoryDashboard from '../features/inventory/InventoryDashboard';
 import DashboardPage from '../features/dashboard/DashboardPage';
 import { SalesReportPage, InventoryReportPage, ProfitLossPage, PurchasesReportPage } from '../features/reports';
 
-const Placeholder = ({ title }) => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h1 className="text-2xl font-bold text-slate-700">{title}</h1>
-      <p className="text-slate-400 mt-2">Coming soon — being built by the team.</p>
-    </div>
-  </div>
-);
+import { POSPage, SalesListPage } from '../features/sales';
+import { PurchasesListPage, AddPurchasePage } from '../features/purchases';
 
 export default function AppRouter() {
   return (
@@ -42,28 +38,48 @@ export default function AppRouter() {
         }}
       />
       <Routes>
+
         {/* Guest only */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Route>
 
         {/* Protected — all authenticated users */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
+
+            {/* Dashboard */}
             <Route path="/dashboard" element={<DashboardPage />} />
+
+            {/* Medicines & Inventory — Esther */}
             <Route path="/medicines" element={<MedicinesPage />} />
-            <Route path="/inventory/dashboard" element={<InventoryDashboard />} />
             <Route path="/inventory" element={<InventoryPage />} />
-            <Route path="/sales" element={<Placeholder title="Sales" />} />
+            <Route path="/inventory/dashboard" element={<InventoryDashboard />} />
+
+            {/* Sales & Purchases — Kelia */}
+            <Route path="/pos" element={<POSPage />} />
+            <Route path="/sales" element={<SalesListPage />} />
+            <Route path="/purchases" element={<PurchasesListPage />} />
+            <Route path="/purchases/new" element={<AddPurchasePage />} />
+
+            {/* Reports — Chantal */}
             <Route path="/reports/sales" element={<SalesReportPage />} />
             <Route path="/reports/inventory" element={<InventoryReportPage />} />
             <Route path="/reports/profit-loss" element={<ProfitLossPage />} />
             <Route path="/reports/purchases" element={<PurchasesReportPage />} />
+
+            {/* Profile */}
             <Route path="/profile" element={<ProfilePage />} />
-            <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
-              <Route path="/users" element={<UserManagementPage />} />
-            </Route>
+
+          </Route>
+        </Route>
+
+        {/* Protected — owner only */}
+        <Route element={<ProtectedRoute allowedRoles={['owner']} />}>
+          <Route element={<AppLayout />}>
+            <Route path="/users" element={<UserManagementPage />} />
           </Route>
         </Route>
 
@@ -72,6 +88,7 @@ export default function AppRouter() {
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
       </Routes>
     </BrowserRouter>
   );
