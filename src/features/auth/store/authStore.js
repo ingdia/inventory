@@ -2,9 +2,10 @@ import { create } from 'zustand';
 import { authService } from '../services/auth.service';
 
 const useAuthStore = create((set) => ({
-  user: null,
-  accessToken: null,
-  isAuthenticated: false,
+  user: { firstName: 'Demo', lastName: 'User', role: 'owner' },
+  accessToken: 'mock-token',
+  isAuthenticated: true,
+  isInitialized: true,
   isLoading: false,
 
   login: async (credentials) => {
