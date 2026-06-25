@@ -83,6 +83,9 @@ export default function AppRouter() {
           </Route>
         </Route>
 
+        {/* Root redirect */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
 
